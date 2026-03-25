@@ -1,0 +1,3 @@
+LEVEL_WIDTH: int = 66
+LEVEL_HEIGHT: int = 22
+MAX_LEVELS: int = 21
