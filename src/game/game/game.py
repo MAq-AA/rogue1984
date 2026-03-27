@@ -73,6 +73,9 @@ class Game:
                     [x.display_item() for x in backpack.items if isinstance(x, Weapon)],
                     weapons=True,
                 )
+                if player.weapon != fist:
+                    if item_id != 0:
+                        level.drop(player.weapon)
                 player.equip(item_id)
 
             case InputEvent.USE_FOOD:

@@ -87,6 +87,21 @@ class Level:
         if isinstance(obj, Item):
             self.items.remove(obj)
 
+    def drop(self, item: Item):
+        x, y = self.find_free_adjacent(self.player.x, self.player.y)
+        if x != -1:
+            self.items.append(item)
+            self.place(item, x, y)
+
+    def find_free_adjacent(self, x, y) -> tuple[int, int]:
+        offsets = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+        random.shuffle(offsets)
+        for dx, dy in offsets:
+            if self[x + dx, y + dy] in [Tile.FLOOR, Tile.CORRIDOR]:
+                return x + dx, y + dy
+        return -1, -1
+
+
     def generate_corridors(self):
         adjacency = {
             0: [1, 3],
