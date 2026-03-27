@@ -70,7 +70,7 @@ class Level:
             if defender.hp <= 0:
                 self.remove(defender)
                 if attacker is self.player and isinstance(defender, Monster):
-                    self.player.backpack.put(Treasure(value=defender.treasure))
+                    attacker.backpack.put(defender.treasure)
 
     def end_turn(self):
         for monster in self.monsters:

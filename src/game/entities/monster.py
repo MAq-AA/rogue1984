@@ -2,6 +2,7 @@ import random
 from dataclasses import dataclass
 
 from game.entities.entity import Entity
+from game.items.treasure import Treasure
 
 
 @dataclass
@@ -16,7 +17,7 @@ class Monster(Entity):
 
     @property
     def treasure(self):
-        return random.randint(1, self.hostility + self.max_hp + self.str + self.dex)
+        return Treasure(value=random.randint(1, self.hostility + self.max_hp + self.str + self.dex))
 
     def get_move(self):
         return random.choice(
