@@ -69,6 +69,8 @@ class Level:
             self.message = f"{attacker.name} hit {defender.name} for {dmg} damage"
             if defender.hp <= 0:
                 self.remove(defender)
+                if attacker is self.player and isinstance(defender, Monster):
+                    self.player.backpack.put(Treasure(value=defender.treasure))
 
     def end_turn(self):
         for monster in self.monsters:
