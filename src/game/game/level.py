@@ -36,7 +36,8 @@ class Level:
         self.items: list[Item] = self.place_items()
         self.monsters: list[Monster] = self.place_monsters()
         self.message = ""
-        self.stair = self.place_stair()
+        self.stair = Stair()
+        self.place_stair()
 
     def place(self, obj: GameObject, x=None, y=None):
         obj.place(x, y)
@@ -135,10 +136,14 @@ class Level:
         return new_items
 
     def place_stair(self):
-        stair = Stair()
-        x, y = self._get_random_coords()
-        self.place(stair, x=x, y=y)
-        return stair
+        retries = 100
+        for i in range(retries):
+            x, y = self._get_random_coords()
+            if self._corridor_obstructed(x, y):
+                continue
+            else:
+                break
+        self.place(self.stair, x=x, y=y)
 
     def _get_random_coords(self):
         room_id = random.randint(0, 8)
@@ -148,6 +153,14 @@ class Level:
         x = random.randint(room.x0 + 1, room.x1 - 1)
         y = random.randint(room.y0 + 1, room.y1 - 1)
         return x, y
+
+    def _corridor_obstructed(self, x, y):
+        return Tile.CORRIDOR in [
+            self[x + 1, y],
+            self[x - 1, y],
+            self[x, y + 1],
+            self[x, y - 1],
+        ]
 
     def __getitem__(self, k) -> Tile | GameObject:
         x, y = k
