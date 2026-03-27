@@ -18,6 +18,9 @@ class Backpack:
         self.items.append(item)
         return True
 
+    def find(self, item_id: int) -> Item:
+        return next(x for x in self.items if id(x) == item_id)
+
 
 @dataclass
 class Character(Entity):
@@ -35,3 +38,33 @@ class Character(Entity):
         return sum(
             item.value for item in self.backpack.items if isinstance(item, Treasure)
         )
+
+    def equip(self, item_id: int):
+        if item_id:
+            item = self.backpack.find(item_id)
+            self.weapon = item
+            self.backpack.remove(item)
+        elif item_id == 0:
+            if self.weapon != fist and self.backpack.put(self.weapon):
+                self.weapon = fist
+
+    def use_food(self, item_id: int):
+        item = self.backpack.find(item_id)
+        self.hp = min(self.hp + item.hp, self.max_hp + self.max_hp_mod)
+        self.backpack.remove(item)
+
+    def use_elixir(self, item_id: int):
+        item = self.backpack.find(item_id)
+        self.max_hp_mod += item.max_hp
+        self.hp += item.max_hp
+        self.str_mod += item.str_
+        self.dex_mod += item.dex
+        self.backpack.remove(item)
+
+    def use_scroll(self, item_id: int):
+        item = self.backpack.find(item_id)
+        self.max_hp += item.max_hp
+        self.hp += item.max_hp
+        self.str += item.str_
+        self.dex += item.dex
+        self.backpack.remove(item)

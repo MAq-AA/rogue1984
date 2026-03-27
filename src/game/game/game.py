@@ -73,46 +73,28 @@ class Game:
                     [x.display_item() for x in backpack.items if isinstance(x, Weapon)],
                     weapons=True,
                 )
-                if item_id:
-                    item = next(x for x in backpack.items if id(x) == item_id)
-                    player.weapon = item
-                    backpack.remove(item)
-                elif item_id == 0:
-                    if player.weapon != fist and backpack.put(player.weapon):
-                        player.weapon = fist
+                player.equip(item_id)
 
             case InputEvent.USE_FOOD:
                 item_id = self.ui.choose_item(
                     [x.display_item() for x in backpack.items if isinstance(x, Food)]
                 )
                 if item_id:
-                    item = next(x for x in backpack.items if id(x) == item_id)
-                    player.hp = min(
-                        player.hp + item.hp, player.max_hp + player.max_hp_mod
-                    )
-                    backpack.remove(item)
+                    player.use_food(item_id)
+
             case InputEvent.USE_ELIXIR:
                 item_id = self.ui.choose_item(
                     [x.display_item() for x in backpack.items if isinstance(x, Elixir)]
                 )
                 if item_id:
-                    item = next(x for x in backpack.items if id(x) == item_id)
-                    player.max_hp_mod += item.max_hp
-                    player.hp += item.max_hp
-                    player.str_mod += item.str_
-                    player.dex_mod += item.dex
-                    backpack.remove(item)
+                    player.use_elixir(item_id)
+
             case InputEvent.USE_SCROLL:
                 item_id = self.ui.choose_item(
                     [x.display_item() for x in backpack.items if isinstance(x, Scroll)]
                 )
                 if item_id:
-                    item = next(x for x in backpack.items if id(x) == item_id)
-                    player.max_hp += item.max_hp
-                    player.hp += item.max_hp
-                    player.str += item.str_
-                    player.dex += item.dex
-                    backpack.remove(item)
+                    player.use_scroll(item_id)
 
     def in_room(self, room, x: int, y: int) -> bool:
         return room.x0 <= x <= room.x1 and room.y0 <= y <= room.y1
