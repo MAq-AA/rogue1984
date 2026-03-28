@@ -50,6 +50,10 @@ class Game:
             # TODO present loser screen
 
         # TODO add function to save score in high score table
+        if self.game_status in [GameStatus.WON, GameStatus.LOST]:
+            self.current_depth = 1
+            self.level = Level(depth=self.current_depth, player=Character())
+            self.game_status = GameStatus.ACTIVE
 
     def handle(self, event: InputEvent):
         level = self.level
@@ -119,6 +123,10 @@ class Game:
                 for x in range(room.x0 + 1, room.x1):
                     for y in range(room.y0 + 1, room.y1):
                         tiles.append(DrawTile(x, y, Tile.FLOOR))
+            else:
+                for x in range(room.x0 + 1, room.x1):
+                    for y in range(room.y0 + 1, room.y1):
+                        tiles.append(DrawTile(x, y, Tile.INVISIBLE_FLOOR))
         return tiles
 
     def draw_corridors(self) -> list[DrawTile]:

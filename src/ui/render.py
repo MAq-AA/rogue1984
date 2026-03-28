@@ -11,6 +11,7 @@ TILE_MAP = {
     Tile.CORNER_TR: "\u2513",
     Tile.CORNER_BL: "\u2517",
     Tile.CORNER_BR: "\u251b",
+    Tile.INVISIBLE_FLOOR: " ",
     Tile.FLOOR: ".",
     Tile.CHARACTER: "@",
     Tile.CORRIDOR: "#",

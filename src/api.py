@@ -12,6 +12,7 @@ class Tile(Enum):
     CORNER_BL = auto()
     CORNER_BR = auto()
     FLOOR = auto()
+    INVISIBLE_FLOOR = auto()
     CHARACTER = auto()
     CORRIDOR = auto()
     DOOR = auto()

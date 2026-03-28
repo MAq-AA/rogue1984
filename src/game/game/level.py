@@ -76,9 +76,11 @@ class Level:
         else:
             self.message = f"{attacker.name} missed {defender.name}"
 
+
     def end_turn(self):
         for monster in self.monsters:
-            dx, dy = monster.get_move()
+            monster.player_search(self.player.x, self.player.y)
+            dx, dy = monster.get_move(self, self.player.x, self.player.y)
             self.move(monster, dx, dy)
 
     def remove(self, obj: GameObject):
