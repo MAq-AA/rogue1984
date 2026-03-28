@@ -22,22 +22,28 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.FileHandler("debug.log", mode="w"))
 
 
+class CollisionException(Exception):
+    pass
+
+
 class Level:
     def __init__(self, depth: int, player: Character):
         self.player = player
         self.depth = depth
         self.exited = False
+        self.items: list[Item] = []
+        self.monsters: list[Monster] = []
         self.rooms: list[Room] = [Room(i) for i in range(9)]
         self.corridors = self.generate_corridors()
         self.starting_room: int = random.randint(0, 8)
         x = (self.rooms[self.starting_room].x0 + self.rooms[self.starting_room].x1) // 2
         y = (self.rooms[self.starting_room].y0 + self.rooms[self.starting_room].y1) // 2
         self.place(player, x, y)
+        self.stair = Stair()
+        self.place_stair()  # place stair before monsters and items to avoid placing them on top of it
         self.items: list[Item] = self.place_items()
         self.monsters: list[Monster] = self.place_monsters()
         self.message = ""
-        self.stair = Stair()
-        self.place_stair()
 
     def place(self, obj: GameObject, x=None, y=None):
         obj.place(x, y)
@@ -135,8 +141,11 @@ class Level:
             monster_types, k=n_monsters, weights=[0.5, 0.3, 0.2, 0.1, 0.1]
         )
         for monster_type in to_place:
-            x, y = self._get_random_coords()
-            monsters.append(monster_type(depth=self.depth, x=x, y=y))
+            try:
+                x, y = self._get_random_coords()
+                monsters.append(monster_type(depth=self.depth, x=x, y=y))
+            except CollisionException:
+                continue
         return monsters
 
     def place_items(self) -> list[Item]:
@@ -153,9 +162,12 @@ class Level:
             weights=[0.1, 0.2, 0.2, 0.5],
         )
         for item_type in to_place:
-            new_items.append(item_type.get_random(level=self.depth))
-            x, y = self._get_random_coords()
-            self.place(new_items[-1], x=x, y=y)
+            try:
+                x, y = self._get_random_coords()
+                new_items.append(item_type.get_random(level=self.depth))
+                self.place(new_items[-1], x=x, y=y)
+            except CollisionException:
+                continue
         return new_items
 
     def place_stair(self):
@@ -175,7 +187,10 @@ class Level:
         room = self.rooms[room_id]
         x = random.randint(room.x0 + 1, room.x1 - 1)
         y = random.randint(room.y0 + 1, room.y1 - 1)
-        return x, y
+        if self[x, y] == Tile.FLOOR:
+            return x, y
+        else:
+            raise CollisionException
 
     def _corridor_obstructed(self, x, y):
         return Tile.CORRIDOR in [
