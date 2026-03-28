@@ -68,10 +68,13 @@ class Level:
             self.message = f"{attacker.name} hit {defender.name} for {dmg} damage"
             if defender.hp <= 0:
                 self.remove(defender)
+        else:
+            self.message = f"{attacker.name} is missed"
 
     def end_turn(self):
         for monster in self.monsters:
-            dx, dy = monster.get_move()
+            monster.player_search(self.player.x, self.player.y)
+            dx, dy = monster.get_move(self, self.player.x, self.player.y)
             self.move(monster, dx, dy)
 
     def remove(self, obj: GameObject):

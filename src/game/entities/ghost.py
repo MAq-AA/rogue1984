@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from api import Tile
-from game.entities.monster import Monster
+from game.entities.monster import Monster, HostilityLevel
 
 
 @dataclass
@@ -14,4 +14,4 @@ class Ghost(Monster):
         self.str = int((3 + self.depth) / 5)
         self.max_hp = int((3 + self.depth) / 5)
         self.hp = self.max_hp
-        self.hostility = 3
+        self.hostility = HostilityLevel.LOW
