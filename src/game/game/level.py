@@ -56,7 +56,7 @@ class Level:
         if isinstance(target, Item) and obj is self.player:
             if self.player.backpack.put(target):
                 self.remove(target)
-                self.message = f"You picked up {target.name}"
+                self.message += f"You picked up {target.name}\n"
             obj.move(dx, dy)
         if isinstance(target, (Monster, Character)) and isinstance(
             obj, (Monster, Character)
@@ -75,14 +75,14 @@ class Level:
                 0, attacker.str + attacker.str_mod + attacker.weapon.str_
             )
             defender.hp -= dmg
-            self.message = f"{attacker.name} hit {defender.name} for {dmg} damage"
+            self.message += f"{attacker.name} hit {defender.name} for {dmg} damage\n"
             if defender.hp <= 0:
                 self.remove(defender)
-                self.message += " and killed it"
+                self.message += "... and killed it!\n"
                 if attacker is self.player and isinstance(defender, Monster):
                     attacker.backpack.put(defender.treasure)
         else:
-            self.message = f"{attacker.name} missed {defender.name}"
+            self.message += f"{attacker.name} missed {defender.name}\n"
 
     def end_turn(self):
         for monster in self.monsters:

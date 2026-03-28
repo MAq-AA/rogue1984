@@ -10,7 +10,7 @@ class UI:
         self.width = width
         self.height = height
         self.sidebar_width = 20
-        self.win = curses.newwin(self.height + 1, self.width, 0, self.sidebar_width)
+        self.win = curses.newwin(self.height + 5, self.width, 0, self.sidebar_width)
         self.sidebar = curses.newwin(self.height, self.sidebar_width, 0, 0)
         render.init(self.win)
 

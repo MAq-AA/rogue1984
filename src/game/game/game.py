@@ -161,7 +161,7 @@ class Game:
             treasure=player.treasure,
             level=self.level.depth,
             message=self.level.message,
-            weapon=player.weapon.name,
+            weapon=player.weapon.display_item().name,
         )
         self.level.message = ""
         return ret

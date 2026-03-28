@@ -3,6 +3,6 @@ from game.items.food import Food
 from game.items.scroll import Scroll
 from game.items.weapon import Weapon
 
-fist = Weapon(name="No weapon")
+fist = Weapon(name="None")
 
 __all__ = [Weapon, Food, Elixir, Scroll]

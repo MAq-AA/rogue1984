@@ -64,7 +64,8 @@ def draw(win, frame: Frame):
         win.addstr(t.y, t.x, char, curses.color_pair(color))
 
     h, w = win.getmaxyx()
-    win.addstr(h - 2, 0, frame.message)
+    message = "\n".join(frame.message.split("\n")[-4:])
+    win.addstr(h - 4, 0, message)
 
 
 def draw_status(win, frame: Frame):
