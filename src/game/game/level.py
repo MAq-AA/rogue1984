@@ -52,7 +52,9 @@ class Level:
                 self.remove(target)
                 self.message = f"You picked up {target.name}"
             obj.move(dx, dy)
-        if isinstance(target, Monster) and obj is self.player:
+        if isinstance(target, (Monster, Character)) and isinstance(
+            obj, (Monster, Character)
+        ):
             self.fight(obj, target)
         if target == Tile.STAIR and obj is self.player:
             self.exited = True
@@ -76,11 +78,10 @@ class Level:
         else:
             self.message = f"{attacker.name} missed {defender.name}"
 
-
     def end_turn(self):
         for monster in self.monsters:
             monster.player_search(self.player.x, self.player.y)
-            dx, dy = monster.get_move(self, self.player.x, self.player.y)
+            dx, dy = monster.get_move(self)
             self.move(monster, dx, dy)
 
     def remove(self, obj: GameObject):
@@ -102,7 +103,6 @@ class Level:
             if self[x + dx, y + dy] in [Tile.FLOOR, Tile.CORRIDOR]:
                 return x + dx, y + dy
         return -1, -1
-
 
     def generate_corridors(self):
         adjacency = {

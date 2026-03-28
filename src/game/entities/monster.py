@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.FileHandler("debug.log", mode="w"))
 
+
 class HostilityLevel(Enum):
     LOW = "2 cell radius to trigger"
     MEDIUM = "4 cell radius to trigger"
@@ -22,8 +23,9 @@ class HostilityLevel(Enum):
         return {
             HostilityLevel.LOW: 2,
             HostilityLevel.MEDIUM: 4,
-            HostilityLevel.HIGH: 6
+            HostilityLevel.HIGH: 6,
         }[self]
+
 
 @dataclass
 class Monster(Entity):
@@ -39,20 +41,24 @@ class Monster(Entity):
 
     @property
     def treasure(self):
-        return Treasure(value=random.randint(1, self.hostility + self.max_hp + self.str + self.dex))
+        return Treasure(
+            value=random.randint(
+                1, self.hostility.value + self.max_hp + self.str + self.dex
+            )
+        )
 
     def get_move(self, level):
         if self.is_triggered:
             return PathFinder.bfs(level, self, level.player)
         else:
             return random.choice(
-                        [
-                            [0, 1],
-                            [0, -1],
-                            [1, 0],
-                            [-1, 0],
-                        ]
-                    )
+                [
+                    [0, 1],
+                    [0, -1],
+                    [1, 0],
+                    [-1, 0],
+                ]
+            )
 
     def player_search(self, player_x_coord: int, player_y_coord: int):
         x_distance = math.fabs(self.x - player_x_coord) - 1
