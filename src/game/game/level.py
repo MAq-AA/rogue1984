@@ -159,7 +159,7 @@ class Level:
                 Food,
             ],
             k=n_items,
-            weights=[0.1, 0.2, 0.2, 0.5],
+            weights=[0.15, 0.2, 0.15, 0.5],
         )
         for item_type in to_place:
             try:
