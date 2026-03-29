@@ -180,17 +180,16 @@ class Level:
                 break
         self.place(self.stair, x=x, y=y)
 
-    def _get_random_coords(self):
-        room_id = random.randint(0, 8)
-        if room_id == self.starting_room:
-            room_id = (room_id + 1) % 9
-        room = self.rooms[room_id]
-        x = random.randint(room.x0 + 1, room.x1 - 1)
-        y = random.randint(room.y0 + 1, room.y1 - 1)
-        if self[x, y] == Tile.FLOOR:
-            return x, y
-        else:
-            raise CollisionException
+    def _get_random_coords(self) -> tuple[int, int]:
+        for _ in range(3):
+            room_id = random.randint(0, 8)
+            if room_id == self.starting_room:
+                room_id = (room_id + 1) % 9
+            room = self.rooms[room_id]
+            x, y = room.get_random_coords()
+            if self[x, y] == Tile.FLOOR:
+                return x, y
+        raise CollisionException
 
     def _corridor_obstructed(self, x, y):
         return Tile.CORRIDOR in [

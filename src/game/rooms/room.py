@@ -24,3 +24,8 @@ class Room:
 
     def is_inside(self, x, y):
         return self.x0 <= x <= self.x1 and self.y0 <= y <= self.y1
+
+    def get_random_coords(self) -> tuple[int, int]:
+        x = random.randint(self.x0 + 1, self.x1 - 1)
+        y = random.randint(self.y0 + 1, self.y1 - 1)
+        return x, y
