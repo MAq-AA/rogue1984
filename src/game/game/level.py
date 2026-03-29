@@ -218,6 +218,8 @@ class Level:
         for c in self.corridors:
             if c.is_inside(x, y):
                 ret = Tile.CORRIDOR
+                if c.door(x, y):
+                    ret = c.door(x, y)
         if (self.stair.x, self.stair.y) == (x, y):
             ret = Tile.STAIR
         return ret

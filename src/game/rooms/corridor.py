@@ -1,11 +1,15 @@
 import random
+from typing import Literal
 
-from . import distance_to_line, in_range
-from .room import Room
+from api import Tile
+from game.rooms import distance_to_line, in_range
+from game.rooms.room import Room
+from game.rooms.door import Door
 
 
 class Corridor:
     def __init__(self, rooms):
+        self._door = None
         self.rooms: list[Room] = sorted(rooms, key=lambda x: x.id)
         if self.rooms[1].id - self.rooms[0].id == 1:
             self.horizontal = True
@@ -54,3 +58,15 @@ class Corridor:
             if dist <= 0.71:
                 return True
         return False
+
+    def door(self, x: int, y: int) -> Door | Literal[False]:
+        if self._door and (x, y) in [(self.x0, self.y0), (self.x1, self.y1)]:
+            return self._door
+        return False
+
+    @property
+    def closed(self) -> bool:
+        return self._door is not None
+
+    def close(self, color: str):
+        self._door = Door.get(color)
