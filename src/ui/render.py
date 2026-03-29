@@ -44,12 +44,16 @@ TILE_COLORS = {
     Tile.ITEM_KEY_RED: curses.COLOR_RED,
     Tile.ITEM_KEY_BLUE: curses.COLOR_BLUE,
     Tile.ITEM_KEY_GREEN: curses.COLOR_GREEN,
+    Tile.CHARACTER: curses.COLOR_MAGENTA,
 }
 
 
 def init(win):
     curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(curses.COLOR_GREEN, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_CYAN, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_MAGENTA, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
     curses.init_pair(curses.COLOR_YELLOW, curses.COLOR_YELLOW, curses.COLOR_BLACK)
     # Do not display cursor
     curses.curs_set(False)

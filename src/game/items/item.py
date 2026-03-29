@@ -16,7 +16,7 @@ class Item(GameObject):
     def display_item(self):
         stat = max(self.hp, self.max_hp, self.dex, self.str_)
         return DisplayItem(
-            name=f"{self.name})",
+            name=f"{self.name}",
             stat=stat,
             id=id(self),
         )
