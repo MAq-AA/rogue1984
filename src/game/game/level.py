@@ -3,6 +3,7 @@ import random
 
 from api import Tile
 from game.base import GameObject
+from game.constants import MAX_DEPTH
 from game.entities import monster_types
 from game.entities.character import Character
 from game.entities.entity import Entity
@@ -11,7 +12,6 @@ from game.items.elixir import Elixir
 from game.items.food import Food
 from game.items.item import Item
 from game.items.scroll import Scroll
-from game.items.treasure import Treasure
 from game.items.weapon import Weapon
 from game.rooms.corridor import Corridor
 from game.rooms.room import Room
@@ -150,7 +150,7 @@ class Level:
 
     def place_items(self) -> list[Item]:
         new_items = []
-        n_items = self.depth + 2
+        n_items = MAX_DEPTH - self.depth
         to_place = random.choices(
             [
                 Weapon,

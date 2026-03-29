@@ -4,6 +4,7 @@ from api import DrawTile, Frame, InputEvent, Tile
 from game.entities.character import Character
 from game.game.level import Level
 from game.items import Elixir, Food, Scroll, Weapon, fist
+from game.constants import MAX_DEPTH
 
 
 class GameStatus(Enum):
@@ -13,8 +14,6 @@ class GameStatus(Enum):
 
 
 class Game:
-    MAX_DEPTH: int = 21
-
     def __init__(self, ui):
         self.ui = ui
         self.current_depth = 1
@@ -36,7 +35,7 @@ class Game:
     def get_current_game_status(self):
         if self.level.player.hp <= 0:
             self.game_status = GameStatus.LOST
-        elif self.current_depth > Game.MAX_DEPTH:
+        elif self.current_depth > MAX_DEPTH:
             self.game_status = GameStatus.WON
         elif self.level.exited:
             self.advance_depth()
