@@ -77,7 +77,7 @@ class Game:
                     weapons=True,
                 )
                 if player.weapon != fist:
-                    if item_id != 0:
+                    if item_id:
                         level.drop(player.weapon)
                 player.equip(item_id)
 
