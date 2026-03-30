@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from api import Tile
-from game.entities.monster import Monster, HostilityLevel
+from game.entities.monster import HostilityLevel, Monster
 
 
 @dataclass

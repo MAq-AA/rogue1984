@@ -1,11 +1,11 @@
 import logging
+import math
 import random
 from dataclasses import dataclass
 from enum import Enum, auto
-import math
 
-from game.entities.move_logic import PathFinder
 from game.entities.entity import Entity
+from game.entities.move_logic import PathFinder
 from game.items.treasure import Treasure
 
 logger = logging.getLogger(__name__)

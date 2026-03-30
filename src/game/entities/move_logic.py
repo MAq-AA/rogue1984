@@ -1,9 +1,10 @@
 import math
+from collections import deque
 from enum import Enum
 
 from api import Tile
-from collections import deque
 from game import constants
+
 
 class PathFinder:
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
