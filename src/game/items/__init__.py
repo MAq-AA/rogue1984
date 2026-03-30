@@ -1,8 +1,8 @@
 from game.items.elixir import Elixir
 from game.items.food import Food
+from game.items.key import Key
 from game.items.scroll import Scroll
 from game.items.weapon import Weapon
-from game.items.key import Key
 
 fist = Weapon(name="None")
 
