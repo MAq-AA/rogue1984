@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, dataclass
+from enum import Enum
 
 from api import Tile
 

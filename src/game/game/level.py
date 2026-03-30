@@ -134,6 +134,9 @@ class Level:
             connected.append(room2)
         return corridors
 
+    def accessible_rooms(self, door_color: str):
+        pass
+
     def place_monsters(self) -> list[Monster]:
         monsters = []
         n_monsters = self.depth + 2

@@ -70,3 +70,6 @@ class Corridor:
 
     def close(self, color: str):
         self._door = Door.get(color)
+
+    def open(self):
+        self._door = None

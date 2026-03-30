@@ -134,7 +134,10 @@ class Game:
             for x in range(min(c.x0, c.x1), max(c.x0, c.x1) + 1):
                 for y in range(min(c.y0, c.y1), max(c.y0, c.y1) + 1):
                     if c.is_inside(x, y):
-                        tiles.append(DrawTile(x, y, Tile.CORRIDOR))
+                        if door := c.door(x, y):
+                            tiles.append(DrawTile(x, y, door.tile))
+                        else:
+                            tiles.append(DrawTile(x, y, Tile.CORRIDOR))
         return tiles
 
     def frame(self) -> Frame:
