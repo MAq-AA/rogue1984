@@ -1,5 +1,6 @@
 import logging
 import random
+from pprint import pformat
 
 from api import Tile
 from game.base import GameObject
@@ -11,9 +12,11 @@ from game.entities.monster import Monster
 from game.items.elixir import Elixir
 from game.items.food import Food
 from game.items.item import Item
+from game.items.key import Key
 from game.items.scroll import Scroll
 from game.items.weapon import Weapon
 from game.rooms.corridor import Corridor
+from game.rooms.door import DoorColor
 from game.rooms.room import Room
 from game.rooms.stair import Stair
 
@@ -36,13 +39,15 @@ class Level:
         self.rooms: list[Room] = [Room(i) for i in range(9)]
         self.corridors = self.generate_corridors()
         self.starting_room: int = random.randint(0, 8)
+        self.place_doors()
+        self.place_keys()
         x = (self.rooms[self.starting_room].x0 + self.rooms[self.starting_room].x1) // 2
         y = (self.rooms[self.starting_room].y0 + self.rooms[self.starting_room].y1) // 2
         self.place(player, x, y)
         self.stair = Stair()
         self.place_stair()  # place stair before monsters and items to avoid placing them on top of it
-        self.items: list[Item] = self.place_items()
-        self.monsters: list[Monster] = self.place_monsters()
+        self.items.extend(self.place_items())
+        self.monsters.extend(self.place_monsters())
         self.message = ""
 
     def place(self, obj: GameObject, x=None, y=None):
@@ -134,8 +139,26 @@ class Level:
             connected.append(room2)
         return corridors
 
-    def accessible_rooms(self, door_color: str):
-        pass
+    def place_doors(self):
+        self.corridors[-1].close(DoorColor.RED)
+
+    def place_keys(self):
+        self.items.append(Key(color=DoorColor.RED))
+        self.place(self.items[-1], *self.rooms[self.starting_room].get_random_coords())
+
+    def accessible_rooms(self, door_color: DoorColor) -> list[int]:
+        room_ids = [self.starting_room]
+        i = 0
+        while i < len(room_ids):
+            for corridor in self.corridors:
+                if corridor.closed and corridor.closed.color == door_color:
+                    continue
+                if self.rooms[room_ids[i]] in corridor.rooms:
+                    for room in corridor.rooms:
+                        if room.id not in room_ids:
+                            room_ids.append(room.id)
+            i += 1
+        return room_ids
 
     def place_monsters(self) -> list[Monster]:
         monsters = []

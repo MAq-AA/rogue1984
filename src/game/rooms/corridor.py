@@ -4,7 +4,7 @@ from typing import Literal
 from api import Tile
 from game.rooms import distance_to_line, in_range
 from game.rooms.room import Room
-from game.rooms.door import Door
+from game.rooms.door import Door, DoorColor
 
 
 class Corridor:
@@ -65,10 +65,10 @@ class Corridor:
         return False
 
     @property
-    def closed(self) -> bool:
-        return self._door is not None
+    def closed(self) -> Door | Literal[None]:
+        return self._door
 
-    def close(self, color: str):
+    def close(self, color: DoorColor):
         self._door = Door.get(color)
 
     def open(self):
