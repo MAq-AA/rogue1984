@@ -1,10 +1,15 @@
 from dataclasses import dataclass
+from typing import TypeVar
 
 from api import Tile
 from game.entities.entity import Entity
 from game.items import fist
 from game.items.item import Item
+from game.items.key import Key
 from game.items.treasure import Treasure
+from game.rooms.door import Door
+
+T = TypeVar("T")
 
 
 class Backpack:
@@ -20,6 +25,9 @@ class Backpack:
 
     def find(self, item_id: int) -> Item:
         return next(x for x in self.items if id(x) == item_id)
+
+    def find_all(self, item_type: type[T]) -> list[T]:
+        return [x for x in self.items if isinstance(x, item_type)]
 
 
 @dataclass
@@ -68,3 +76,8 @@ class Character(Entity):
         self.str += item.str_
         self.dex += item.dex
         self.backpack.remove(item)
+
+    def open_door(self, door: Door):
+        keys = self.backpack.find_all(Key)
+        if any(x.color == door.color for x in keys):
+            door.open()

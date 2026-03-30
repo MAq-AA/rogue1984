@@ -1,10 +1,10 @@
 from enum import Enum, auto
 
 from api import DrawTile, Frame, InputEvent, Tile
+from game.constants import MAX_DEPTH
 from game.entities.character import Character
 from game.game.level import Level
 from game.items import Elixir, Food, Scroll, Weapon, fist
-from game.constants import MAX_DEPTH
 
 
 class GameStatus(Enum):
@@ -134,8 +134,8 @@ class Game:
             for x in range(min(c.x0, c.x1), max(c.x0, c.x1) + 1):
                 for y in range(min(c.y0, c.y1), max(c.y0, c.y1) + 1):
                     if c.is_inside(x, y):
-                        if door := c.door(x, y):
-                            tiles.append(DrawTile(x, y, door.tile))
+                        if c.door(x, y) and c.closed:
+                            tiles.append(DrawTile(x, y, c.closed.tile))
                         else:
                             tiles.append(DrawTile(x, y, Tile.CORRIDOR))
         return tiles

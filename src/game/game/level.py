@@ -16,7 +16,7 @@ from game.items.key import Key
 from game.items.scroll import Scroll
 from game.items.weapon import Weapon
 from game.rooms.corridor import Corridor
-from game.rooms.door import DoorColor
+from game.rooms.door import Door, DoorColor
 from game.rooms.room import Room
 from game.rooms.stair import Stair
 
@@ -58,6 +58,11 @@ class Level:
 
         if target in [Tile.FLOOR, Tile.CORRIDOR]:
             obj.move(dx, dy)
+        if isinstance(target, Door):
+            if not target.closed:
+                obj.move(dx, dy)
+            elif isinstance(obj, Character):
+                obj.open_door(target)
         if isinstance(target, Item) and obj is self.player:
             if self.player.backpack.put(target):
                 self.remove(target)

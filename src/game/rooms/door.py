@@ -1,7 +1,7 @@
 from dataclasses import dataclass
+from enum import Enum
 
 from api import Tile
-from enum import Enum
 from game.base import GameObject
 
 
@@ -22,8 +22,16 @@ door_tiles = {
 class Door(GameObject):
     color: DoorColor = DoorColor.RED
     tile: Tile = Tile.DOOR_RED
+    _closed: bool = True
 
     @classmethod
     def get(cls, color: DoorColor):
         tile = door_tiles[color]
         return cls(color=color, tile=tile)
+
+    @property
+    def closed(self):
+        return self._closed
+
+    def open(self):
+        self._closed = False

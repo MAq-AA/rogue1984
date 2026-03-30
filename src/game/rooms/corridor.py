@@ -3,13 +3,13 @@ from typing import Literal
 
 from api import Tile
 from game.rooms import distance_to_line, in_range
-from game.rooms.room import Room
 from game.rooms.door import Door, DoorColor
+from game.rooms.room import Room
 
 
 class Corridor:
     def __init__(self, rooms):
-        self._door = None
+        self._door: Door | None = None
         self.rooms: list[Room] = sorted(rooms, key=lambda x: x.id)
         if self.rooms[1].id - self.rooms[0].id == 1:
             self.horizontal = True
@@ -66,10 +66,12 @@ class Corridor:
 
     @property
     def closed(self) -> Door | Literal[None]:
-        return self._door
+        if self._door and self._door.closed:
+            return self._door
 
     def close(self, color: DoorColor):
         self._door = Door.get(color)
 
     def open(self):
-        self._door = None
+        if self._door:
+            self._door.open()
