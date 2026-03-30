@@ -4,7 +4,7 @@ from api import DrawTile, Frame, InputEvent, Tile
 from game.constants import MAX_DEPTH
 from game.entities.character import Character
 from game.game.level import Level
-from game.items import Elixir, Food, Scroll, Weapon, fist
+from game.items import Elixir, Food, Key, Scroll, Weapon, fist
 
 
 class GameStatus(Enum):
@@ -73,7 +73,7 @@ class Game:
                 level.end_turn()
             case InputEvent.USE_WEAPON:
                 item_id = self.ui.choose_item(
-                    [x.display_item() for x in backpack.items if isinstance(x, Weapon)],
+                    [x.display_item() for x in backpack.find_all(Weapon)],
                     weapons=True,
                 )
                 if player.weapon != fist:
@@ -83,21 +83,21 @@ class Game:
 
             case InputEvent.USE_FOOD:
                 item_id = self.ui.choose_item(
-                    [x.display_item() for x in backpack.items if isinstance(x, Food)]
+                    [x.display_item() for x in backpack.find_all(Food)]
                 )
                 if item_id:
                     player.use_food(item_id)
 
             case InputEvent.USE_ELIXIR:
                 item_id = self.ui.choose_item(
-                    [x.display_item() for x in backpack.items if isinstance(x, Elixir)]
+                    [x.display_item() for x in backpack.find_all(Elixir)]
                 )
                 if item_id:
                     player.use_elixir(item_id)
 
             case InputEvent.USE_SCROLL:
                 item_id = self.ui.choose_item(
-                    [x.display_item() for x in backpack.items if isinstance(x, Scroll)]
+                    [x.display_item() for x in backpack.find_all(Scroll)]
                 )
                 if item_id:
                     player.use_scroll(item_id)
@@ -164,6 +164,7 @@ class Game:
             level=self.level.depth,
             message=self.level.message,
             weapon=player.weapon.display_item().name,
+            keys=", ".join([x.color.value for x in player.backpack.find_all(Key)]),
         )
         self.level.message = ""
         return ret

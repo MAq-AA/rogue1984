@@ -43,9 +43,7 @@ class Character(Entity):
 
     @property
     def treasure(self):
-        return sum(
-            item.value for item in self.backpack.items if isinstance(item, Treasure)
-        )
+        return sum(item.value for item in self.backpack.find_all(Treasure))
 
     def equip(self, item_id: int):
         if item_id:

@@ -81,6 +81,7 @@ def draw_status(win, frame: Frame):
     win.addstr(f"Dex: {frame.dex}+{frame.dex_mod}\n")
     win.addstr(f"Treasure: {frame.treasure}\n")
     win.addstr(f"Weapon: {frame.weapon}\n")
+    win.addstr(f"Keys: {frame.keys}\n")
 
     win.refresh()
 

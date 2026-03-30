@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Iterable
 
@@ -67,6 +67,7 @@ class Frame:
     level: int
     message: str = ""
     weapon: str = ""
+    keys: str = ""
 
 
 @dataclass(frozen=True)
