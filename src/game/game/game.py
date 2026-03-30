@@ -173,7 +173,5 @@ class Game:
         self.current_depth += 1
         self.level = Level(depth=self.current_depth, player=self.level.player)
         player = self.level.player
-        player.hp = max(1, player.hp - player.max_hp_mod)
-        player.max_hp_mod = 0
-        player.str_mod = 0
-        player.dex_mod = 0
+        player.remove_bonuses()
+        player.remove_keys()

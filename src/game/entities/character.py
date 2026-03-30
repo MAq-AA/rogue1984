@@ -79,3 +79,14 @@ class Character(Entity):
         keys = self.backpack.find_all(Key)
         if any(x.color == door.color for x in keys):
             door.open()
+
+    def remove_bonuses(self):
+        self.hp = max(1, self.hp - self.max_hp_mod)
+        self.max_hp_mod = 0
+        self.str_mod = 0
+        self.dex_mod = 0
+
+    def remove_keys(self):
+        keys = self.backpack.find_all(Key)
+        for k in keys:
+            self.backpack.remove(k)
