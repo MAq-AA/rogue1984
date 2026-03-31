@@ -1,10 +1,17 @@
+from __future__ import annotations
+import random
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
 
 from api import Tile
 from game.entities.entity import Entity
 from game.items import fist
 from game.items.item import Item
 from game.items.treasure import Treasure
+
+if TYPE_CHECKING:
+    from game.entities.monster import Monster
 
 
 class Backpack:
@@ -24,6 +31,7 @@ class Backpack:
 
 @dataclass
 class Character(Entity):
+    MIN_PART_OF_THE_STAT = 0.5
     tile: Tile = Tile.CHARACTER
     max_hp: int = 20
     hp: int = max_hp
@@ -32,6 +40,7 @@ class Character(Entity):
     weapon = fist
     backpack: Backpack = Backpack()
     name = "player"
+    is_stunned = False
 
     @property
     def treasure(self):
@@ -68,3 +77,20 @@ class Character(Entity):
         self.str += item.str_
         self.dex += item.dex
         self.backpack.remove(item)
+
+    def attack(self, monster: Monster):
+        is_got_hit = self.roll_dexterity() > monster.roll_dexterity()
+
+        if is_got_hit:
+            monster.get_damage(self.roll_strength())
+
+    def roll_strength(self):
+        min_str = int((self.str + self.str_mod)*self.MIN_PART_OF_THE_STAT)
+        return random.randint(min_str, self.str)
+
+    def roll_dexterity(self):
+        min_dex = int((self.dex + self.dex_mod)*self.MIN_PART_OF_THE_STAT)
+        return random.randint(min_dex, self.dex)
+
+    def get_damage(self, amount):
+        self.hp -= amount

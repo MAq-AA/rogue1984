@@ -1,12 +1,27 @@
-import math
 from enum import Enum
 
 from api import Tile
 from collections import deque
 from game import constants
 
+class MoveDirection(Enum):
+    STAY = (0, 0)
+    L = (-1, 0)
+    LT = (-1, -1)
+    T = (0, -1)
+    RT = (1, -1)
+    R = (1, 0)
+    RB = (1, 1)
+    B = (0, 1)
+    LB = (-1, 1)
+
 class PathFinder:
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    directions = [
+        MoveDirection.L.value,
+        MoveDirection.T.value,
+        MoveDirection.R.value,
+        MoveDirection.B.value
+    ]
     PASSABLE = [Tile.FLOOR, Tile.CORRIDOR, Tile.INVISIBLE_FLOOR]
 
     @classmethod
@@ -45,4 +60,4 @@ class PathFinder:
                         queue.append((nx, ny))
                         prev[(nx, ny)] = (x, y)
 
-        return 0, 0
+        return MoveDirection.STAY.value

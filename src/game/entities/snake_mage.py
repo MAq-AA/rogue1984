@@ -1,17 +1,58 @@
+import random
 from dataclasses import dataclass
 
 from api import Tile
-from game.entities.monster import Monster, HostilityLevel
+from game.entities.character import Character
+from game.entities.monster import Monster, HostilityLevel, StatType
+from game.entities.move_logic import PathFinder, MoveDirection
 
 
 @dataclass
 class SnakeMage(Monster):
     tile: Tile = Tile.MONSTER_SNAKE_MAGE
     name = "snake mage"
+    _last_move: tuple = None
+    CHANCE_TO_STUN = 0.1
 
     def __post_init__(self):
-        self.dex = int((3 + self.depth) * 1.5)
-        self.str = int((3 + self.depth) / 3)
-        self.max_hp = int((3 + self.depth) / 3)
+        self.dex += int(self.depth * StatType.VERY_HIGH.value)
+        self.str += int(self.depth * StatType.LOW.value)
+        self.max_hp += int(self.depth * StatType.LOW.value)
         self.hp = self.max_hp
         self.hostility = HostilityLevel.HIGH
+
+    def attack(self, character: Character):
+        is_got_hit = self.roll_dexterity() > character.roll_dexterity()
+
+        if is_got_hit:
+            character.get_damage(self.roll_strength())
+            if random.random() < self.CHANCE_TO_STUN:
+                character.is_stunned = True
+
+    def get_move(self, level):
+        if self.is_triggered:
+            chasing_move = PathFinder.bfs(level, self, level.player)
+            if chasing_move != MoveDirection.STAY.value:
+                return chasing_move
+        return self.get_random_move()
+
+    def get_random_move(self):
+        population = [
+            MoveDirection.LT.value,
+            MoveDirection.RT.value,
+            MoveDirection.RB.value,
+            MoveDirection.LB.value,
+        ]
+
+        available_moves = [move for move in population if move != self._last_move]
+
+        weights = [25] * len(available_moves)
+
+        chosen = random.choices(
+            population=available_moves,
+            weights=weights,
+            k=1
+        )[0]
+
+        self._last_move = chosen
+        return chosen

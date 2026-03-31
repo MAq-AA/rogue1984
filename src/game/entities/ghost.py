@@ -1,17 +1,49 @@
+import random
 from dataclasses import dataclass
 
 from api import Tile
-from game.entities.monster import Monster, HostilityLevel
+from game.entities.monster import Monster, HostilityLevel, StatType
+from game.entities.move_logic import PathFinder, MoveDirection
 
 
 @dataclass
 class Ghost(Monster):
     tile: Tile = Tile.MONSTER_GHOST
     name = "ghost"
+    _spawn_room = None
+    _invisible = False
 
     def __post_init__(self):
-        self.dex = int((3 + self.depth) / 1)
-        self.str = int((3 + self.depth) / 5)
-        self.max_hp = int((3 + self.depth) / 5)
+        self.dex += int(self.depth * StatType.HIGH.value)
+        self.str += int(self.depth * StatType.LOW.value)
+        self.max_hp += int(self.depth * StatType.LOW.value)
         self.hp = self.max_hp
         self.hostility = HostilityLevel.LOW
+
+    def get_move(self, level):
+        if self.is_triggered:
+            chasing_move = PathFinder.bfs(level, self, level.player)
+            if chasing_move != MoveDirection.STAY.value:
+                return chasing_move
+        return self.teleport_within_room(level)
+
+    def teleport_within_room(self, level):
+        if not self._spawn_room is None:
+            self.x = random.randint(self._spawn_room.x0 + 1, self._spawn_room.x1 - 1)
+            self.y = random.randint(self._spawn_room.y0 + 1, self._spawn_room.y1 - 1)
+        else:
+            for room in level.rooms:
+                if room.is_inside(self.x, self.y):
+                    self._spawn_room = room
+                    return self.teleport_within_room(level)
+        return MoveDirection.STAY.value
+
+    def flip_visibility(self):
+        if self.is_triggered:
+            self.tile = Tile.MONSTER_GHOST
+        else:
+            self.tile = random.choices(
+                [Tile.MONSTER_GHOST, Tile.INVISIBLE_MONSTER_GHOST],
+                weights=[10, 90],
+                k=1
+            )[0]
