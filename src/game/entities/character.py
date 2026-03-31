@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import TypeVar
 
@@ -32,6 +34,7 @@ class Backpack:
 
 @dataclass
 class Character(Entity):
+    MIN_PART_OF_THE_STAT = 0.5
     tile: Tile = Tile.CHARACTER
     max_hp: int = 20
     hp: int = max_hp
@@ -40,6 +43,7 @@ class Character(Entity):
     weapon = fist
     backpack: Backpack = Backpack()
     name = "player"
+    is_stunned = False
 
     @property
     def treasure(self):

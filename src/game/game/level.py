@@ -5,7 +5,7 @@ from pprint import pformat
 from api import Tile
 from game.base import GameObject
 from game.constants import MAX_DEPTH
-from game.entities import monster_types
+from game.entities import monster_types, Ghost, Ogre
 from game.entities.character import Character
 from game.entities.entity import Entity
 from game.entities.monster import Monster
@@ -58,47 +58,54 @@ class Level:
 
         if target in [Tile.FLOOR, Tile.CORRIDOR]:
             obj.move(dx, dy)
+        elif isinstance(target, Item) and obj is self.player:
+            if self.player.backpack.put(target):
+                self.remove(target)
+                self.message += f"You picked up {target.name}\n"
+            obj.move(dx, dy)
         if isinstance(target, Door):
             if not target.closed:
                 obj.move(dx, dy)
             elif isinstance(obj, Character):
                 obj.open_door(target)
-        if isinstance(target, Item) and obj is self.player:
-            if self.player.backpack.put(target):
-                self.remove(target)
-                self.message += f"You picked up {target.name}\n"
-            obj.move(dx, dy)
-        if isinstance(target, (Monster, Character)) and isinstance(
-            obj, (Monster, Character)
-        ):
-            self.fight(obj, target)
-        if target == Tile.STAIR and obj is self.player:
+        elif isinstance(target, Character) and isinstance(obj, Monster):
+            self.do_attack(obj, target)
+        elif isinstance(target, Monster) and isinstance(obj, Character):
+            self.do_attack(obj, target)
+        elif target == Tile.STAIR and obj is self.player:
             self.exited = True
             obj.move(dx, dy)
 
-    def fight(self, attacker: Entity, defender: Entity):
-        hit = random.randint(0, attacker.dex + attacker.dex_mod) > random.randint(
-            0, defender.dex + defender.dex_mod
-        )
-        if hit:
-            dmg = random.randint(
-                0, attacker.str + attacker.str_mod + attacker.weapon.str_
-            )
-            defender.hp -= dmg
+    def do_attack(self, attacker: Entity, defender: Entity):
+        defender_hp_before_attack = defender.hp
+        attacker.attack(defender)
+        dmg = defender_hp_before_attack - defender.hp
+        if dmg > 0:
             self.message += f"{attacker.name} hit {defender.name} for {dmg} damage\n"
+            if self.player.is_stunned:
+                self.message += "you are stunned\n"
             if defender.hp <= 0:
                 self.remove(defender)
                 self.message += "... and killed it!\n"
-                if attacker is self.player and isinstance(defender, Monster):
+                if isinstance(defender, Monster) and isinstance(attacker, Character):
                     attacker.backpack.put(defender.treasure)
-        else:
+        elif not isinstance(attacker, Ogre) or attacker.preparing_to_attack:
             self.message += f"{attacker.name} missed {defender.name}\n"
 
     def end_turn(self):
         for monster in self.monsters:
             monster.player_search(self.player.x, self.player.y)
-            dx, dy = monster.get_move(self)
-            self.move(monster, dx, dy)
+            if isinstance(monster, Ghost):
+                monster.flip_visibility()
+            move = monster.get_move(self)
+            first_target = self[monster.x + move[0], monster.y + move[1]]
+            self.move(monster, move[0], move[1])
+            if isinstance(monster, Ogre):
+                move = monster.get_move(self)
+                second_target = self[monster.x + move[0], monster.y + move[1]]
+                if not (first_target is self.player and second_target is self.player):
+                    if first_target != Tile.CORRIDOR:
+                        self.move(monster, move[0], move[1])
 
     def remove(self, obj: GameObject):
         if isinstance(obj, Monster):

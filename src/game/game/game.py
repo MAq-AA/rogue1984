@@ -55,6 +55,10 @@ class Game:
             self.game_status = GameStatus.ACTIVE
 
     def handle(self, event: InputEvent):
+        if self.level.player.is_stunned:
+            self.level.player.is_stunned = False
+            self.level.end_turn()
+            return None
         level = self.level
         player = level.player
         backpack = player.backpack

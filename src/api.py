@@ -30,6 +30,7 @@ class Tile(Enum):
     MONSTER_ZOMBIE = auto()
     MONSTER_VAMPIRE = auto()
     MONSTER_GHOST = auto()
+    INVISIBLE_MONSTER_GHOST = auto()
     MONSTER_OGRE = auto()
     MONSTER_SNAKE_MAGE = auto()
 

@@ -30,6 +30,7 @@ TILE_MAP = {
     Tile.MONSTER_ZOMBIE: "z",
     Tile.MONSTER_VAMPIRE: "v",
     Tile.MONSTER_GHOST: "g",
+    Tile.INVISIBLE_MONSTER_GHOST: " ",
     Tile.MONSTER_OGRE: "o",
     Tile.MONSTER_SNAKE_MAGE: "s",
 }
