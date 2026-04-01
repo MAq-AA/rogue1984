@@ -152,11 +152,13 @@ class Level:
         return corridors
 
     def place_doors(self):
-        self.corridors[-1].close(DoorColor.RED)
+        random.choice(self.corridors).close(DoorColor.RED)
 
     def place_keys(self):
         self.items.append(Key(color=DoorColor.RED))
-        self.place(self.items[-1], *self.rooms[self.starting_room].get_random_coords())
+        room_ids = self.accessible_rooms(DoorColor.RED)
+        key_room = self.rooms[random.choice(room_ids)]
+        self.place(self.items[-1], *key_room.get_random_coords())
 
     def accessible_rooms(self, door_color: DoorColor) -> list[int]:
         room_ids = [self.starting_room]
