@@ -5,7 +5,7 @@ from pprint import pformat
 from api import Tile
 from game.base import GameObject
 from game.constants import MAX_DEPTH
-from game.entities import monster_types, Ghost, Ogre
+from game.entities import Ghost, Ogre, monster_types
 from game.entities.character import Character
 from game.entities.entity import Entity
 from game.entities.monster import Monster
