@@ -39,6 +39,7 @@ class Level:
         self.rooms: list[Room] = [Room(i) for i in range(9)]
         self.corridors = self.generate_corridors()
         self.starting_room: int = random.randint(0, 8)
+        self.door_colors: list[DoorColor] = []
         self.place_doors()
         self.place_keys()
         x = (self.rooms[self.starting_room].x0 + self.rooms[self.starting_room].x1) // 2
@@ -152,13 +153,18 @@ class Level:
         return corridors
 
     def place_doors(self):
-        random.choice(self.corridors).close(DoorColor.RED)
+        door_colors = [DoorColor.RED, DoorColor.GREEN, DoorColor.BLUE]
+        n_doors = random.randint(0, 3)
+        for c in door_colors[:n_doors]:
+            random.choice(self.corridors).close(c)
+            self.door_colors.append(c)
 
     def place_keys(self):
-        self.items.append(Key(color=DoorColor.RED))
-        room_ids = self.accessible_rooms(DoorColor.RED)
-        key_room = self.rooms[random.choice(room_ids)]
-        self.place(self.items[-1], *key_room.get_random_coords())
+        for c in self.door_colors:
+            self.items.append(Key.get(color=c))
+            room_ids = self.accessible_rooms(c)
+            key_room = self.rooms[random.choice(room_ids)]
+            self.place(self.items[-1], *key_room.get_random_coords())
 
     def accessible_rooms(self, door_color: DoorColor) -> list[int]:
         room_ids = [self.starting_room]
