@@ -46,8 +46,8 @@ class Level:
         self.place(player, x, y)
         self.stair = Stair()
         self.place_stair()  # place stair before monsters and items to avoid placing them on top of it
-        self.items.extend(self.place_items())
-        self.monsters.extend(self.place_monsters())
+        self.place_items()
+        self.place_monsters()
         self.message = ""
 
     def place(self, obj: GameObject, x=None, y=None):
@@ -172,8 +172,7 @@ class Level:
             i += 1
         return room_ids
 
-    def place_monsters(self) -> list[Monster]:
-        monsters = []
+    def place_monsters(self):
         n_monsters = self.depth + 2
         to_place = random.choices(
             monster_types, k=n_monsters, weights=[0.5, 0.3, 0.2, 0.1, 0.1]
@@ -181,13 +180,11 @@ class Level:
         for monster_type in to_place:
             try:
                 x, y = self._get_random_coords()
-                monsters.append(monster_type(depth=self.depth, x=x, y=y))
+                self.monsters.append(monster_type(depth=self.depth, x=x, y=y))
             except CollisionException:
                 continue
-        return monsters
 
-    def place_items(self) -> list[Item]:
-        new_items = []
+    def place_items(self):
         n_items = MAX_DEPTH - self.depth
         to_place = random.choices(
             [
@@ -202,11 +199,13 @@ class Level:
         for item_type in to_place:
             try:
                 x, y = self._get_random_coords()
-                new_items.append(item_type.get_random(level=self.depth))
-                self.place(new_items[-1], x=x, y=y)
+                self.items.append(item_type.get_random(level=self.depth))
+                logger.debug(
+                    f"generated coords: {x}, {y}. Current contents: {self[x, y]}"
+                )
+                self.place(self.items[-1], x=x, y=y)
             except CollisionException:
                 continue
-        return new_items
 
     def place_stair(self):
         retries = 100
