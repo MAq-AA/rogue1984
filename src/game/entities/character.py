@@ -99,7 +99,7 @@ class Character(Entity):
 
     def move(self, x: int = 0, y: int = 0):
         super().move(x, y)
-        stat_tracker.tiles += x + y
+        stat_tracker.tiles += abs(x) + abs(y)
 
     def get_damage(self, amount):
         super().get_damage(amount)
