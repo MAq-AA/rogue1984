@@ -46,8 +46,7 @@ class Game:
             pass
             # TODO present winner screen
         elif self.game_status == GameStatus.LOST:
-            pass
-            # TODO present loser screen
+            self.ui.draw_stats(stat_tracker.load_stats())
 
         # TODO add function to save score in high score table
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:

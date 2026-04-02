@@ -1,7 +1,7 @@
 import curses
 from typing import Iterable
 
-from api import DisplayItem, Frame, Tile
+from api import DisplayItem, GameStats, Frame, Tile
 
 TILE_MAP = {
     Tile.EMPTY: " ",
@@ -83,6 +83,14 @@ def draw_status(win, frame: Frame):
     win.addstr(f"Treasure: {frame.treasure}\n")
     win.addstr(f"Weapon: {frame.weapon}\n")
     win.addstr(f"Keys: {frame.keys}\n")
+
+    win.refresh()
+
+
+def draw_stats(win, stats: GameStats):
+    win.erase()
+
+    win.addstr(str(stats))
 
     win.refresh()
 

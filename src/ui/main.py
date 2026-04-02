@@ -22,6 +22,9 @@ class UI:
         render.draw(self.win, frame)
         render.draw_status(self.sidebar, frame)
 
+    def draw_stats(self, stats: GameStats):
+        render.draw_stats(self.win, stats)
+
     def choose_item(self, items: Iterable[DisplayItem], weapons=False) -> int | None:
         key = render.choose_item(self.win, items, weapons)
         if key == 0:
@@ -29,6 +32,3 @@ class UI:
         for i, item in enumerate(items):
             if i + 1 == key:
                 return item.id
-
-    def show_stats(self, stats: GameStats):
-        pass
