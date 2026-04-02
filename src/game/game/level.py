@@ -1,6 +1,5 @@
 import logging
 import random
-from pprint import pformat
 
 from api import Tile
 from game.base import GameObject
@@ -19,6 +18,7 @@ from game.rooms.corridor import Corridor
 from game.rooms.door import Door, DoorColor
 from game.rooms.room import Room
 from game.rooms.stair import Stair
+from stat_tracker import stat_tracker
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -57,14 +57,14 @@ class Level:
     def move(self, obj: GameObject, dx=0, dy=0):
         target = self[obj.x + dx, obj.y + dy]
 
-        if target in [Tile.FLOOR, Tile.CORRIDOR]:
-            obj.move(dx, dy)
-        elif isinstance(target, Item) and obj is self.player:
+        if isinstance(target, Item) and obj is self.player:
             if self.player.backpack.put(target):
                 self.remove(target)
                 self.message += f"You picked up {target.name}\n"
+                target = self[obj.x + dx, obj.y + dy]
+        if target in [Tile.FLOOR, Tile.CORRIDOR]:
             obj.move(dx, dy)
-        if isinstance(target, Door):
+        elif isinstance(target, Door):
             if not target.closed:
                 obj.move(dx, dy)
             elif isinstance(obj, Character):
@@ -90,6 +90,8 @@ class Level:
                 self.message += "... and killed it!\n"
                 if isinstance(defender, Monster) and isinstance(attacker, Character):
                     attacker.backpack.put(defender.treasure)
+                    stat_tracker.enemies += 1
+                    stat_tracker.treasure += defender.treasure.value
         elif not isinstance(attacker, Ogre) or attacker.preparing_to_attack:
             self.message += f"{attacker.name} missed {defender.name}\n"
 

@@ -11,7 +11,7 @@ class GameObject:
     y: int = -1
     tile: Tile = Tile.UNKNOWN
 
-    def move(self, x=0, y=0):
+    def move(self, x: int = 0, y: int = 0):
         self.x += x
         self.y += y
 

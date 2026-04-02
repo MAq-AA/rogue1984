@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 from typing import TypeVar
 
@@ -10,6 +8,7 @@ from game.items.item import Item
 from game.items.key import Key
 from game.items.treasure import Treasure
 from game.rooms.door import Door
+from stat_tracker import stat_tracker
 
 T = TypeVar("T")
 
@@ -62,6 +61,7 @@ class Character(Entity):
         item = self.backpack.find(item_id)
         self.hp = min(self.hp + item.hp, self.max_hp + self.max_hp_mod)
         self.backpack.remove(item)
+        stat_tracker.food += 1
 
     def use_elixir(self, item_id: int):
         item = self.backpack.find(item_id)
@@ -70,6 +70,7 @@ class Character(Entity):
         self.str_mod += item.str_
         self.dex_mod += item.dex
         self.backpack.remove(item)
+        stat_tracker.elixirs += 1
 
     def use_scroll(self, item_id: int):
         item = self.backpack.find(item_id)
@@ -78,6 +79,7 @@ class Character(Entity):
         self.str += item.str_
         self.dex += item.dex
         self.backpack.remove(item)
+        stat_tracker.scrolls += 1
 
     def open_door(self, door: Door):
         keys = self.backpack.find_all(Key)
@@ -94,3 +96,15 @@ class Character(Entity):
         keys = self.backpack.find_all(Key)
         for k in keys:
             self.backpack.remove(k)
+
+    def move(self, x: int = 0, y: int = 0):
+        super().move(x, y)
+        stat_tracker.tiles += x + y
+
+    def get_damage(self, amount):
+        super().get_damage(amount)
+        stat_tracker.hits += 1
+
+    def attack(self, other: Entity):
+        super().attack(other)
+        stat_tracker.attacks += 1

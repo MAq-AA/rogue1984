@@ -5,6 +5,7 @@ from game.constants import MAX_DEPTH
 from game.entities.character import Character
 from game.game.level import Level
 from game.items import Elixir, Food, Key, Scroll, Weapon, fist
+from stat_tracker import stat_tracker
 
 
 class GameStatus(Enum):
@@ -179,3 +180,4 @@ class Game:
         player = self.level.player
         player.remove_bonuses()
         player.remove_keys()
+        stat_tracker.level += self.current_depth
