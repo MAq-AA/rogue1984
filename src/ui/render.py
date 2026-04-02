@@ -106,12 +106,13 @@ def draw_stats(win, stats: GameStats):
         win.addstr(0, col - len(header[i]), header[i])
     h, w = win.getmaxyx()
     for i, run in enumerate(stats.runs):
-        if i == h:
+        if i == h - 1:
             break
         for j, stat in enumerate(fields(run)):
             col = columns[j]
             value = getattr(run, stat.name)
             win.addstr(i + 1, col - len(str(value)), str(value))
+    win.addstr(h - 1, 0, "Press Space to restart, or q to quit")
 
     win.refresh()
 
