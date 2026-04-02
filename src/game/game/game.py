@@ -47,6 +47,7 @@ class Game:
             pass
             # TODO present winner screen
         elif self.game_status == GameStatus.LOST:
+            stat_tracker.write_stats()
             if self.ui.game_over(stat_tracker.load_stats()):
                 self.quit = True
 
@@ -55,7 +56,6 @@ class Game:
             self.current_depth = 1
             self.level = Level(depth=self.current_depth, player=Character())
             self.game_status = GameStatus.ACTIVE
-            stat_tracker.write_stats()
 
     def handle(self, event: InputEvent):
         if self.level.player.is_stunned:
