@@ -104,7 +104,10 @@ def draw_stats(win, stats: GameStats):
     )
     for i, col in enumerate(columns):
         win.addstr(0, col - len(header[i]), header[i])
+    h, w = win.getmaxyx()
     for i, run in enumerate(stats.runs):
+        if i == h:
+            break
         for j, stat in enumerate(fields(run)):
             col = columns[j]
             value = getattr(run, stat.name)
