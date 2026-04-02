@@ -33,6 +33,7 @@ TILE_MAP = {
     Tile.INVISIBLE_MONSTER_GHOST: " ",
     Tile.MONSTER_OGRE: "o",
     Tile.MONSTER_SNAKE_MAGE: "s",
+    Tile.MONSTER_MIMIC: "m"
 }
 
 TILE_COLORS = {

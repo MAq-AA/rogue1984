@@ -185,7 +185,7 @@ class Level:
     def place_monsters(self):
         n_monsters = self.depth + 2
         to_place = random.choices(
-            monster_types, k=n_monsters, weights=[0.5, 0.3, 0.2, 0.1, 0.1]
+            monster_types, k=n_monsters, weights=[0.5, 0.3, 0.2, 0.1, 0.1, 0.05]
         )
         for monster_type in to_place:
             try:
