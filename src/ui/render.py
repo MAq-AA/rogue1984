@@ -1,7 +1,8 @@
 import curses
+from dataclasses import fields
 from typing import Iterable
 
-from api import DisplayItem, GameStats, Frame, Tile
+from api import DisplayItem, Frame, GameStats, Tile
 
 TILE_MAP = {
     Tile.EMPTY: " ",
@@ -89,7 +90,25 @@ def draw_status(win, frame: Frame):
 def draw_stats(win, stats: GameStats):
     win.erase()
 
-    win.addstr(str(stats))
+    columns = (9, 20, 29, 35, 44, 53, 62, 68, 75)
+    header = (
+        "Treasure",
+        "Max level",
+        "Enemies",
+        "Food",
+        "Elixirs",
+        "Scrolls",
+        "Attacks",
+        "Hits",
+        "Tiles",
+    )
+    for i, col in enumerate(columns):
+        win.addstr(0, col - len(header[i]), header[i])
+    for i, run in enumerate(stats.runs):
+        for j, stat in enumerate(fields(run)):
+            col = columns[j]
+            value = getattr(run, stat.name)
+            win.addstr(i + 1, col - len(str(value)), str(value))
 
     win.refresh()
 

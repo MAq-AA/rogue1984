@@ -3,7 +3,7 @@ from typing import Iterable
 
 from api import DisplayItem, Frame, GameStats
 from ui import render
-from ui.input import read_input, InputEvent
+from ui.input import InputEvent, read_input
 
 
 class UI:

@@ -36,6 +36,7 @@ class _Tracker:
 
     def load_stats(self) -> GameStats:
         all_stats = self.get_all_stats()
+        all_stats.sort(key=lambda x: -x["treasure"])
         run_list = [RunStats(**row) for row in all_stats]
         return GameStats(run_list)
 
