@@ -3,6 +3,7 @@ from enum import Enum
 
 from api import Tile
 from game import constants
+from game.rooms.door import Door
 
 
 class MoveDirection(Enum):
@@ -24,7 +25,13 @@ class PathFinder:
         MoveDirection.R.value,
         MoveDirection.B.value,
     ]
-    PASSABLE = [Tile.FLOOR, Tile.CORRIDOR, Tile.INVISIBLE_FLOOR]
+
+    @classmethod
+    def passable(cls, obj):
+        if obj in [Tile.FLOOR, Tile.CORRIDOR, Tile.INVISIBLE_FLOOR]:
+            return True
+        if isinstance(obj, Door) and not obj.closed:
+            return True
 
     @classmethod
     def bfs(cls, level, monster, player):
@@ -55,7 +62,7 @@ class PathFinder:
                             cur = prev[cur]
                         return cur[0] - start[0], cur[1] - start[1]
 
-                    if level[nx, ny] not in cls.PASSABLE:
+                    if not cls.passable(level[nx, ny]):
                         continue
                     if (nx, ny) not in visited:
                         visited.add((nx, ny))
