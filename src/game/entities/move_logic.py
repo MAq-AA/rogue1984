@@ -28,7 +28,7 @@ class PathFinder:
 
     @classmethod
     def passable(cls, obj):
-        if obj in [Tile.FLOOR, Tile.CORRIDOR, Tile.INVISIBLE_FLOOR]:
+        if obj in [Tile.FLOOR, Tile.CORRIDOR]:
             return True
         if isinstance(obj, Door) and not obj.closed:
             return True

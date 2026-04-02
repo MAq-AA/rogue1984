@@ -130,7 +130,7 @@ class Game:
             else:
                 for x in range(room.x0 + 1, room.x1):
                     for y in range(room.y0 + 1, room.y1):
-                        tiles.append(DrawTile(x, y, Tile.INVISIBLE_FLOOR))
+                        tiles.append(DrawTile(x, y, Tile.EMPTY))
         return tiles
 
     def draw_corridors(self) -> list[DrawTile]:
