@@ -1,7 +1,7 @@
 import curses
 from typing import Iterable
 
-from api import DisplayItem, Frame
+from api import DisplayItem, Frame, GameStats
 from ui import input, render
 
 
@@ -29,3 +29,6 @@ class UI:
         for i, item in enumerate(items):
             if i + 1 == key:
                 return item.id
+
+    def show_stats(self, stats: GameStats):
+        pass

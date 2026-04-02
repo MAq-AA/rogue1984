@@ -76,3 +76,21 @@ class DisplayItem:
     name: str
     stat: int
     id: int
+
+
+@dataclass(frozen=True)
+class RunStats:
+    treasure: int
+    level: int
+    enemies: int
+    food: int
+    elixirs: int
+    scrolls: int
+    attacks: int
+    hits: int
+    tiles: int
+
+
+@dataclass(frozen=True)
+class GameStats:
+    runs: list[RunStats]
