@@ -20,13 +20,14 @@ class Game:
         self.current_depth = 1
         self.level = Level(depth=self.current_depth, player=Character())
         self.game_status = GameStatus.ACTIVE
+        self.quit = False
 
     def loop(self):
         self.ui.draw(self.frame())
-        while True:
+        while not self.quit:
             event = self.ui.get_input()
             if event == InputEvent.QUIT:
-                break
+                self.quit = True
             if event is not None:
                 self.handle(event)
                 self.get_current_game_status()
@@ -46,7 +47,8 @@ class Game:
             pass
             # TODO present winner screen
         elif self.game_status == GameStatus.LOST:
-            self.ui.draw_stats(stat_tracker.load_stats())
+            if self.ui.game_over(stat_tracker.load_stats()):
+                self.quit = True
 
         # TODO add function to save score in high score table
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:

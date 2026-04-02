@@ -10,6 +10,7 @@ KEYMAP = {
     "j": InputEvent.USE_FOOD,
     "k": InputEvent.USE_ELIXIR,
     "e": InputEvent.USE_SCROLL,
+    " ": InputEvent.CONFIRM,
 }
 
 

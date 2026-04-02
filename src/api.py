@@ -44,6 +44,7 @@ class InputEvent(Enum):
     USE_FOOD = auto()
     USE_ELIXIR = auto()
     USE_SCROLL = auto()
+    CONFIRM = auto()
 
 
 @dataclass(frozen=True)

@@ -2,7 +2,8 @@ import curses
 from typing import Iterable
 
 from api import DisplayItem, Frame, GameStats
-from ui import input, render
+from ui import render
+from ui.input import read_input, InputEvent
 
 
 class UI:
@@ -14,16 +15,19 @@ class UI:
         self.sidebar = curses.newwin(self.height, self.sidebar_width, 0, 0)
         render.init(self.win)
 
-    def get_input(self) -> input.InputEvent | None:
+    def get_input(self) -> InputEvent | None:
         key = self.win.getkey()
-        return input.read_input(key)
+        return read_input(key)
 
     def draw(self, frame: Frame):
         render.draw(self.win, frame)
         render.draw_status(self.sidebar, frame)
 
-    def draw_stats(self, stats: GameStats):
+    def game_over(self, stats: GameStats) -> bool:
         render.draw_stats(self.win, stats)
+        while (key := self.get_input()) not in [InputEvent.CONFIRM, InputEvent.QUIT]:
+            pass
+        return key == InputEvent.QUIT
 
     def choose_item(self, items: Iterable[DisplayItem], weapons=False) -> int | None:
         key = render.choose_item(self.win, items, weapons)
