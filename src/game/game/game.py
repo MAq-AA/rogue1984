@@ -54,6 +54,7 @@ class Game:
             self.current_depth = 1
             self.level = Level(depth=self.current_depth, player=Character())
             self.game_status = GameStatus.ACTIVE
+            stat_tracker.write_stats()
 
     def handle(self, event: InputEvent):
         if self.level.player.is_stunned:
@@ -180,4 +181,4 @@ class Game:
         player = self.level.player
         player.remove_bonuses()
         player.remove_keys()
-        stat_tracker.level += self.current_depth
+        stat_tracker.level = self.current_depth
