@@ -162,18 +162,18 @@ class Level:
             self.door_colors.append(c)
 
     def place_keys(self):
-        for c in self.door_colors:
+        for i, c in enumerate(self.door_colors):
             self.items.append(Key.get(color=c))
-            room_ids = self.accessible_rooms(c)
+            room_ids = self.accessible_rooms(self.door_colors[: i + 1])
             key_room = self.rooms[random.choice(room_ids)]
             self.place(self.items[-1], *key_room.get_random_coords())
 
-    def accessible_rooms(self, door_color: DoorColor) -> list[int]:
+    def accessible_rooms(self, door_color: list[DoorColor]) -> list[int]:
         room_ids = [self.starting_room]
         i = 0
         while i < len(room_ids):
             for corridor in self.corridors:
-                if corridor.closed and corridor.closed.color == door_color:
+                if corridor.closed and corridor.closed.color in door_color:
                     continue
                 if self.rooms[room_ids[i]] in corridor.rooms:
                     for room in corridor.rooms:
