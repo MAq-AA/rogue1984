@@ -32,6 +32,7 @@ class Tile(Enum):
     INVISIBLE_MONSTER_GHOST = auto()
     MONSTER_OGRE = auto()
     MONSTER_SNAKE_MAGE = auto()
+    MONSTER_MIMIC = auto()
 
 
 class InputEvent(Enum):
