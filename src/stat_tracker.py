@@ -32,7 +32,7 @@ class _Tracker:
         new_record = asdict(self)
         all_stats.append(new_record)
         with open("statistics.json", "w") as f:
-            json.dump(all_stats, f)
+            json.dump(all_stats, f, indent=2)
 
     def load_stats(self) -> GameStats:
         all_stats = self.get_all_stats()
