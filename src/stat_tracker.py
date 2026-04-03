@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass, fields
+from dataclasses import asdict, dataclass, fields
 
 from api import GameStats, RunStats
 
@@ -29,7 +29,7 @@ class _Tracker:
 
     def write_stats(self):
         all_stats = self.get_all_stats()
-        new_record = self.snapshot()
+        new_record = asdict(self)
         all_stats.append(new_record)
         with open("statistics.json", "w") as f:
             json.dump(all_stats, f)
@@ -39,9 +39,6 @@ class _Tracker:
         all_stats.sort(key=lambda x: -x["treasure"])
         run_list = [RunStats(**row) for row in all_stats]
         return GameStats(run_list)
-
-    def snapshot(self) -> dict:
-        return {stat: getattr(self, stat) for stat in self.stats}
 
 
 stat_tracker = _Tracker()
