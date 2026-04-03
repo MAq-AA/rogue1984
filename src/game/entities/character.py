@@ -7,6 +7,7 @@ from game.items import fist
 from game.items.item import Item
 from game.items.key import Key
 from game.items.treasure import Treasure
+from game.items.weapon import Weapon
 from game.rooms.door import Door
 from stat_tracker import stat_tracker
 
@@ -33,16 +34,15 @@ class Backpack:
 
 @dataclass
 class Character(Entity):
-    MIN_PART_OF_THE_STAT = 0.5
+    MIN_PART_OF_THE_STAT: float = 0.5
     tile: Tile = Tile.CHARACTER
     max_hp: int = 20
     hp: int = max_hp
-    str = 5
-    dex = 5
-    weapon = fist
+    str: int = 5
+    dex: int = 5
     backpack: Backpack = Backpack()
     name = "player"
-    is_stunned = False
+    is_stunned: bool = False
 
     @property
     def treasure(self):
@@ -51,7 +51,8 @@ class Character(Entity):
     def equip(self, item_id: int):
         if item_id:
             item = self.backpack.find(item_id)
-            self.weapon = item
+            if isinstance(item, Weapon):
+                self.weapon = item
             self.backpack.remove(item)
         elif item_id == 0:
             if self.weapon != fist and self.backpack.put(self.weapon):

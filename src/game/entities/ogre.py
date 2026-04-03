@@ -2,7 +2,7 @@ import random
 from dataclasses import dataclass
 
 from api import Tile
-from game.entities.character import Character
+from game.entities.entity import Entity
 from game.entities.monster import HostilityLevel, Monster, StatType
 from game.entities.move_logic import MoveDirection, PathFinder
 
@@ -11,7 +11,7 @@ from game.entities.move_logic import MoveDirection, PathFinder
 class Ogre(Monster):
     tile: Tile = Tile.MONSTER_OGRE
     name = "ogre"
-    preparing_to_attack = True
+    preparing_to_attack: bool = True
 
     def __post_init__(self):
         self.dex += int(self.depth * StatType.LOW.value)
@@ -20,14 +20,14 @@ class Ogre(Monster):
         self.hp = self.max_hp
         self.hostility = HostilityLevel.MEDIUM
 
-    def attack(self, character: Character):
+    def attack(self, other: Entity):
         if self.preparing_to_attack:
             self.preparing_to_attack = False
         else:
-            is_got_hit = self.roll_dexterity() > character.roll_dexterity()
+            is_got_hit = self.roll_dexterity() > other.roll_dexterity()
 
             if is_got_hit:
-                character.get_damage(self.roll_strength())
+                other.get_damage(self.roll_strength())
 
             self.preparing_to_attack = True
 

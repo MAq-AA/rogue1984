@@ -4,14 +4,15 @@ from dataclasses import dataclass
 from api import Tile
 from game.entities.monster import HostilityLevel, Monster, StatType
 from game.entities.move_logic import MoveDirection, PathFinder
+from game.rooms.room import Room
 
 
 @dataclass
 class Ghost(Monster):
     tile: Tile = Tile.MONSTER_GHOST
-    name = "ghost"
-    _spawn_room = None
-    _invisible = False
+    name: str = "ghost"
+    _spawn_room: Room | None = None
+    _invisible: bool = False
 
     def __post_init__(self):
         self.dex += int(self.depth * StatType.HIGH.value)

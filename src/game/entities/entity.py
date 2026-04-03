@@ -1,21 +1,22 @@
+from dataclasses import dataclass
 import random
 
 from api import Tile
 from game.base import GameObject
-from game.items import fist
+from game.items import fist, Weapon
 
 
+@dataclass
 class Entity(GameObject):
-    tile: Tile
-    max_hp: int
-    max_hp_mod = 0
-    hp: int
-    str: int
-    str_mod = 0
-    dex: int
-    dex_mod = 0
-    weapon = fist
-    name: "str" = "unknown"
+    max_hp: int = 0
+    max_hp_mod: int = 0
+    hp: int = 0
+    str: int = 0
+    str_mod: int = 0
+    dex: int = 0
+    dex_mod: int = 0
+    weapon: Weapon = fist
+    name: __builtins__["str"] = "unknown"
     MIN_PART_OF_THE_STAT: float = 0.5
 
     def get_damage(self, amount):

@@ -2,6 +2,7 @@ import random
 from dataclasses import dataclass
 
 from api import Tile
+from game.entities.entity import Entity
 from game.entities.character import Character
 from game.entities.monster import HostilityLevel, Monster, StatType
 from game.entities.move_logic import MoveDirection, PathFinder
@@ -10,9 +11,9 @@ from game.entities.move_logic import MoveDirection, PathFinder
 @dataclass
 class SnakeMage(Monster):
     tile: Tile = Tile.MONSTER_SNAKE_MAGE
-    name = "snake mage"
-    _last_move: tuple = None
-    CHANCE_TO_STUN = 0.1
+    name: __builtins__["str"] = "snake mage"
+    _last_move: tuple | None = None
+    CHANCE_TO_STUN: float = 0.1
 
     def __post_init__(self):
         self.dex += int(self.depth * StatType.VERY_HIGH.value)
@@ -21,13 +22,13 @@ class SnakeMage(Monster):
         self.hp = self.max_hp
         self.hostility = HostilityLevel.HIGH
 
-    def attack(self, character: Character):
-        is_got_hit = self.roll_dexterity() > character.roll_dexterity()
+    def attack(self, other: Entity):
+        is_got_hit = self.roll_dexterity() > other.roll_dexterity()
 
         if is_got_hit:
-            character.get_damage(self.roll_strength())
+            other.get_damage(self.roll_strength())
             if random.random() < self.CHANCE_TO_STUN:
-                character.is_stunned = True
+                other.is_stunned = True
 
     def get_move(self, level):
         if self.is_triggered:

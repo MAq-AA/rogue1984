@@ -21,7 +21,7 @@ class HostilityLevel(Enum):
     HIGH = "6 cell radius to trigger"
 
     @property
-    def value(self):
+    def int_value(self):
         return {
             HostilityLevel.LOW: 2,
             HostilityLevel.MEDIUM: 4,
@@ -39,20 +39,20 @@ class StatType(Enum):
 @dataclass
 class Monster(Entity):
     depth: int = 0
-    MIN_PART_OF_THE_STAT = 0.25
+    MIN_PART_OF_THE_STAT: float = 0.25
     hostility: HostilityLevel = HostilityLevel.LOW
     max_hp: int = 3
     str: int = 3
     dex: int = 3
     hp: int = 0
-    name = "monster"
-    is_triggered = False
+    name: __builtins__["str"] = "monster"
+    is_triggered: bool = False
 
     @property
     def treasure(self):
         return Treasure(
             value=random.randint(
-                1, self.hostility.value + self.max_hp + self.str + self.dex
+                1, self.hostility.int_value + self.max_hp + self.str + self.dex
             )
         )
 
@@ -78,7 +78,7 @@ class Monster(Entity):
         if not self.is_triggered:
             x_distance = math.fabs(self.x - player_x_coord) - 1
             y_distance = math.fabs(self.y - player_y_coord) - 1
-            trigger_distance = self.hostility.value
+            trigger_distance = self.hostility.int_value
 
             if x_distance <= trigger_distance and y_distance <= trigger_distance:
                 self.is_triggered = True
