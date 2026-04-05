@@ -36,8 +36,8 @@ class Mimic(Monster):
 
         return MoveDirection.STAY.value
 
-    def player_search(self, player_x_coord: int, player_y_coord: int):
+    def player_search(self, level):
         if not self.is_triggered:
-            super().player_search(player_x_coord, player_y_coord)
+            super().player_search(level)
         elif self.tile != Tile.MONSTER_MIMIC:
             self.tile = Tile.MONSTER_MIMIC

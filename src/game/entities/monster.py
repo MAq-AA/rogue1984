@@ -75,11 +75,18 @@ class Monster(Entity):
             ]
         )
 
-    def player_search(self, player_x_coord: int, player_y_coord: int):
+    def player_search(self, level):
         if not self.is_triggered:
-            x_distance = math.fabs(self.x - player_x_coord) - 1
-            y_distance = math.fabs(self.y - player_y_coord) - 1
+            x_distance = math.fabs(self.x - level.player.x) - 1
+            y_distance = math.fabs(self.y - level.player.y) - 1
             trigger_distance = self.hostility.int_value
 
             if x_distance <= trigger_distance and y_distance <= trigger_distance:
-                self.is_triggered = True
+                for room in level.rooms:
+                    if room.is_inside(self.x, self.y) and room.is_inside(level.player.x, level.player.y):
+                        self.is_triggered = True
+                        return None
+                for corridor in level.corridors:
+                    if corridor.is_inside(self.x, self.y) and corridor.is_inside(level.player.x, level.player.y):
+                        self.is_triggered = True
+                        return None

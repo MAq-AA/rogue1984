@@ -6,6 +6,7 @@ from game.entities.character import Character
 from game.game.level import Level
 from game.items import Elixir, Food, Key, Scroll, Weapon, fist
 from stat_tracker import stat_tracker
+from game.game.fog_of_war import FogOfWar
 
 
 class GameStatus(Enum):
@@ -20,6 +21,7 @@ class Game:
         self.current_depth = 1
         self.level = Level(depth=self.current_depth, player=Character())
         self.game_status = GameStatus.ACTIVE
+        self.fog_of_war = FogOfWar(self.level)
         self.quit = False
 
     def loop(self):
@@ -158,6 +160,7 @@ class Game:
         )
         tiles.append(DrawTile(player.x, player.y, Tile.CHARACTER))
         tiles.append(DrawTile(self.level.stair.x, self.level.stair.y, Tile.STAIR))
+        tiles.extend(self.fog_of_war.clear_fog())
         ret = Frame(
             tiles=tiles,
             hp=player.hp,
@@ -179,6 +182,7 @@ class Game:
     def advance_depth(self):
         self.current_depth += 1
         self.level = Level(depth=self.current_depth, player=self.level.player)
+        self.fog_of_war = FogOfWar(self.level)
         player = self.level.player
         player.remove_bonuses()
         player.remove_keys()
