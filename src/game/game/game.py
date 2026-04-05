@@ -23,6 +23,10 @@ class Game:
         self.game_status = GameStatus.ACTIVE
         self.fog_of_war = FogOfWar(self.level)
         self.quit = False
+        from data_layer import Writer
+
+        data_writer = Writer()
+        data_writer.save_to_file(self)
 
     def loop(self):
         self.ui.draw(self.frame())

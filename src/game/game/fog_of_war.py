@@ -1,5 +1,4 @@
 import math
-from _collections_abc import dict_values
 
 from api import Tile
 from game.base import GameObject
@@ -32,7 +31,7 @@ class FogOfWar:
                     if coord[0] in [room.x0, room.x1] or coord[1] in [room.y0, room.y1]:
                         self.wall_coords.add(coord)
 
-    def clear_fog(self) -> dict[tuple[int, int], GameObject]:
+    def clear_fog(self):
         player_x = self.level.player.x
         player_y = self.level.player.y
 
