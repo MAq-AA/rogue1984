@@ -97,7 +97,7 @@ class Level:
 
     def end_turn(self):
         for monster in self.monsters:
-            monster.player_search(self.player.x, self.player.y)
+            monster.player_search(self)
             if isinstance(monster, Ghost):
                 monster.flip_visibility()
             move = monster.get_move(self)
