@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import builtins
 import logging
 import math
 import random
@@ -45,7 +46,7 @@ class Monster(Entity):
     str: int = 3
     dex: int = 3
     hp: int = 0
-    name: __builtins__["str"] = "monster"
+    name: builtins.str = "monster"
     is_triggered: bool = False
 
     @property

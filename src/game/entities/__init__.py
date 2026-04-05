@@ -6,3 +6,4 @@ from game.entities.vampire import Vampire
 from game.entities.zombie import Zombie
 
 monster_types = [Zombie, Vampire, Ghost, Ogre, SnakeMage, Mimic]
+__all__ = monster_types

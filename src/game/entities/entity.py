@@ -1,3 +1,4 @@
+import builtins
 from dataclasses import dataclass
 import random
 
@@ -16,7 +17,7 @@ class Entity(GameObject):
     dex: int = 0
     dex_mod: int = 0
     weapon: Weapon = fist
-    name: __builtins__["str"] = "unknown"
+    name: builtins.str = "unknown"
     MIN_PART_OF_THE_STAT: float = 0.5
 
     def get_damage(self, amount):
