@@ -76,8 +76,8 @@ class Monster(Entity):
 
     def player_search(self, level):
         if not self.is_triggered:
-            x_distance = math.fabs(self.x - player_x_coord) - 1
-            y_distance = math.fabs(self.y - player_y_coord) - 1
+            x_distance = math.fabs(self.x - level.player.x) - 1
+            y_distance = math.fabs(self.y - level.player.y) - 1
             trigger_distance = self.hostility.int_value
 
             if x_distance <= trigger_distance and y_distance <= trigger_distance:
