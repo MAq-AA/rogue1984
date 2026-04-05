@@ -6,4 +6,4 @@ from game.items.weapon import Weapon
 
 fist = Weapon(name="None")
 
-__all__ = [Weapon, Food, Elixir, Scroll, Key]
+__all__ = ["Weapon", "Food", "Elixir", "Scroll", "Key", "fist"]

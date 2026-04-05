@@ -1,10 +1,10 @@
 import builtins
-from dataclasses import dataclass, field
 import random
+from dataclasses import dataclass, field
 
 from api import Tile
 from game.base import GameObject
-from game.items import fist, Weapon
+from game.items import Weapon, fist
 
 
 @dataclass

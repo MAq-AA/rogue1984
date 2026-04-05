@@ -2,8 +2,8 @@ import sys
 from dataclasses import dataclass
 
 from api import Tile
-from game.entities.entity import Entity
 from game.entities.character import Character
+from game.entities.entity import Entity
 from game.entities.monster import HostilityLevel, Monster, StatType
 from game.entities.move_logic import MoveDirection, PathFinder
 

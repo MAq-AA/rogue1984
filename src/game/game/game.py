@@ -3,10 +3,10 @@ from enum import Enum, auto
 from api import DrawTile, Frame, InputEvent, Tile
 from game.constants import MAX_DEPTH
 from game.entities.character import Character
+from game.game.fog_of_war import FogOfWar
 from game.game.level import Level
 from game.items import Elixir, Food, Key, Scroll, Weapon, fist
 from stat_tracker import stat_tracker
-from game.game.fog_of_war import FogOfWar
 
 
 class GameStatus(Enum):
