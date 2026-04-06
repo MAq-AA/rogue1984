@@ -6,12 +6,16 @@ from game.game.game import Game
 from ui.main import UI
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.FileHandler("debug.log", mode="w"))
+logging.basicConfig(filename="debug.log", level=logging.DEBUG, filemode="w")
 
 
 def main(stdscr):
     game = Game(ui=UI(width=LEVEL_WIDTH, height=LEVEL_HEIGHT))
+    # from data_layer import Reader
+
+    # reader = Reader()
+    # game = reader.load_from_file()
+    game.ui = UI(width=LEVEL_WIDTH, height=LEVEL_HEIGHT)
     game.loop()
 
 

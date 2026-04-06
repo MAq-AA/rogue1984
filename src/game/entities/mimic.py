@@ -9,17 +9,19 @@ from game.entities.move_logic import MoveDirection, PathFinder
 @dataclass
 class Mimic(Monster):
     tile: Tile = random.choices(
-        population=[Tile.ITEM_FOOD,
-                    Tile.ITEM_ELIXIR,
-                    Tile.ITEM_SCROLL,
-                    Tile.ITEM_WEAPON,
-                    Tile.ITEM_KEY_RED,
-                    Tile.ITEM_KEY_BLUE,
-                    Tile.ITEM_KEY_GREEN],
+        population=[
+            Tile.ITEM_FOOD,
+            Tile.ITEM_ELIXIR,
+            Tile.ITEM_SCROLL,
+            Tile.ITEM_WEAPON,
+            Tile.ITEM_KEY_RED,
+            Tile.ITEM_KEY_BLUE,
+            Tile.ITEM_KEY_GREEN,
+        ],
         weights=[20, 20, 20, 10, 5, 5, 5],
-        k=1
+        k=1,
     )[0]
-    name = "mimic"
+    name: str = "mimic"
 
     def __post_init__(self):
         self.dex += int(self.depth * StatType.HIGH.value)

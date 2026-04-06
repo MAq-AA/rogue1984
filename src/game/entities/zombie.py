@@ -9,7 +9,7 @@ from game.entities.move_logic import MoveDirection, PathFinder
 @dataclass
 class Zombie(Monster):
     tile: Tile = Tile.MONSTER_ZOMBIE
-    name = "zombie"
+    name: str = "zombie"
 
     def __post_init__(self):
         self.dex += int(self.depth * StatType.LOW.value)

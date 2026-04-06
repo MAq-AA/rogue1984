@@ -1,8 +1,11 @@
 import curses
+import logging
 from dataclasses import fields
 from typing import Iterable
 
 from api import DisplayItem, Frame, GameStats, Tile
+
+logger = logging.getLogger(__name__)
 
 TILE_MAP = {
     Tile.EMPTY: " ",
@@ -33,7 +36,7 @@ TILE_MAP = {
     Tile.INVISIBLE_MONSTER_GHOST: " ",
     Tile.MONSTER_OGRE: "o",
     Tile.MONSTER_SNAKE_MAGE: "s",
-    Tile.MONSTER_MIMIC: "m"
+    Tile.MONSTER_MIMIC: "m",
 }
 
 TILE_COLORS = {
