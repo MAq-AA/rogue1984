@@ -10,7 +10,7 @@ from game.entities.move_logic import MoveDirection, PathFinder
 @dataclass
 class Ogre(Monster):
     tile: Tile = Tile.MONSTER_OGRE
-    name = "ogre"
+    name: str = "ogre"
     preparing_to_attack: bool = True
 
     def __post_init__(self):

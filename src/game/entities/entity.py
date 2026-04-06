@@ -1,9 +1,10 @@
-from dataclasses import dataclass, field
+import builtins
 import random
+from dataclasses import dataclass, field
 
 from api import Tile
 from game.base import GameObject
-from game.items import fist, Weapon
+from game.items import Weapon, fist
 
 
 @dataclass
@@ -15,8 +16,8 @@ class Entity(GameObject):
     str_mod: int = 0
     dex: int = 0
     dex_mod: int = 0
+    name: builtins.str = "unknown"
     weapon: Weapon = field(default_factory=lambda: fist)
-    name: __builtins__["str"] = "unknown"
     MIN_PART_OF_THE_STAT: float = 0.5
 
     def get_damage(self, amount):

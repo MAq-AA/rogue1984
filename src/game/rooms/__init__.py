@@ -1,7 +1,9 @@
-import logging
 import math
 
-logger = logging.getLogger(__name__)
+from game.rooms.door import Door
+from game.rooms.room import Room
+from game.rooms.stair import Stair
+
 
 def distance_to_line(p0, p1, p) -> float:
     x0, y0 = p0
@@ -14,3 +16,6 @@ def distance_to_line(p0, p1, p) -> float:
 
 def in_range(x, x0, x1):
     return min(x0, x1) <= x <= max(x0, x1)
+
+
+__all__ = ["Room", "Stair", "Door", "distance_to_line", "in_range"]

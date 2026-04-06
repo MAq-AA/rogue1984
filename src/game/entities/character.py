@@ -1,3 +1,4 @@
+import builtins
 from dataclasses import dataclass
 from typing import TypeVar
 
@@ -41,7 +42,7 @@ class Character(Entity):
     str: int = 5
     dex: int = 5
     backpack: Backpack = Backpack()
-    name = "player"
+    name: builtins.str = "player"
     is_stunned: bool = False
 
     @property

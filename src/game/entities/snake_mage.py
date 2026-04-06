@@ -1,9 +1,9 @@
+import builtins
 import random
 from dataclasses import dataclass
 
 from api import Tile
 from game.entities.entity import Entity
-from game.entities.character import Character
 from game.entities.monster import HostilityLevel, Monster, StatType
 from game.entities.move_logic import MoveDirection, PathFinder
 
@@ -11,7 +11,7 @@ from game.entities.move_logic import MoveDirection, PathFinder
 @dataclass
 class SnakeMage(Monster):
     tile: Tile = Tile.MONSTER_SNAKE_MAGE
-    name: __builtins__["str"] = "snake mage"
+    name: builtins.str = "snake mage"
     _last_move: tuple | None = None
     CHANCE_TO_STUN: float = 0.1
 

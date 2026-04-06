@@ -21,8 +21,6 @@ from game.rooms.stair import Stair
 from stat_tracker import stat_tracker
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.FileHandler("debug.log", mode="w"))
 
 
 class CollisionException(Exception):
@@ -30,8 +28,7 @@ class CollisionException(Exception):
 
 
 class Level:
-    def __init__(self, depth: int, player: Character):
-        self.player = player
+    def __init__(self, depth: int):
         self.depth = depth
         self.exited = False
         self.items: list[Item] = []
@@ -39,17 +36,21 @@ class Level:
         self.rooms: list[Room] = [Room(i) for i in range(9)]
         self.corridors = self.generate_corridors()
         self.starting_room: int = random.randint(0, 8)
+        self.player = Character()
         self.door_colors: list[DoorColor] = []
         self.place_doors()
         self.place_keys()
-        x = (self.rooms[self.starting_room].x0 + self.rooms[self.starting_room].x1) // 2
-        y = (self.rooms[self.starting_room].y0 + self.rooms[self.starting_room].y1) // 2
-        self.place(player, x, y)
         self.stair = Stair()
         self.place_stair()  # place stair before monsters and items to avoid placing them on top of it
         self.place_items()
         self.place_monsters()
         self.message = ""
+
+    def add_player(self, player: Character):
+        x = (self.rooms[self.starting_room].x0 + self.rooms[self.starting_room].x1) // 2
+        y = (self.rooms[self.starting_room].y0 + self.rooms[self.starting_room].y1) // 2
+        self.player = player
+        self.place(player, x, y)
 
     def place(self, obj: GameObject, x=None, y=None):
         obj.place(x, y)
@@ -249,7 +250,7 @@ class Level:
     def __getitem__(self, k) -> Tile | GameObject:
         x, y = k
         ret = Tile.EMPTY
-        if (self.player.x, self.player.y) == (x, y):
+        if self.player and (self.player.x, self.player.y) == (x, y):
             return self.player
         for item in self.items:
             if (item.x, item.y) == (x, y):

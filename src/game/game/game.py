@@ -1,12 +1,15 @@
+import logging
 from enum import Enum, auto
 
 from api import DrawTile, Frame, InputEvent, Tile
 from game.constants import MAX_DEPTH
 from game.entities.character import Character
+from game.game.fog_of_war import FogOfWar
 from game.game.level import Level
 from game.items import Elixir, Food, Key, Scroll, Weapon, fist
 from stat_tracker import stat_tracker
-from game.game.fog_of_war import FogOfWar
+
+logger = logging.getLogger(__name__)
 
 
 class GameStatus(Enum):
@@ -19,7 +22,8 @@ class Game:
     def __init__(self, ui):
         self.ui = ui
         self.current_depth = 1
-        self.level = Level(depth=self.current_depth, player=Character())
+        self.level = Level(depth=self.current_depth)
+        self.level.add_player(Character())
         self.game_status = GameStatus.ACTIVE
         self.fog_of_war = FogOfWar(self.level)
         self.quit = False
@@ -182,9 +186,14 @@ class Game:
 
     def advance_depth(self):
         self.current_depth += 1
-        self.level = Level(depth=self.current_depth, player=self.level.player)
+        self.level = Level(depth=self.current_depth)
+        self.level.add_player(self.level.player)
+        self.level.player.remove_bonuses()
+        self.level.player.remove_keys()
         self.fog_of_war = FogOfWar(self.level)
-        player = self.level.player
-        player.remove_bonuses()
-        player.remove_keys()
         stat_tracker.level = self.current_depth
+
+        from data_layer import Writer
+
+        data_writer = Writer()
+        data_writer.save_to_file(self)

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging
+import builtins
 import math
 import random
 from dataclasses import dataclass
@@ -9,10 +9,6 @@ from enum import Enum
 from game.entities.entity import Entity
 from game.entities.move_logic import MoveDirection, PathFinder
 from game.items.treasure import Treasure
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.FileHandler("debug.log", mode="w"))
 
 
 class HostilityLevel(Enum):
@@ -45,7 +41,7 @@ class Monster(Entity):
     str: int = 3
     dex: int = 3
     hp: int = 0
-    name: __builtins__["str"] = "monster"
+    name: builtins.str = "monster"
     is_triggered: bool = False
 
     @property
@@ -82,10 +78,14 @@ class Monster(Entity):
 
             if x_distance <= trigger_distance and y_distance <= trigger_distance:
                 for room in level.rooms:
-                    if room.is_inside(self.x, self.y) and room.is_inside(level.player.x, level.player.y):
+                    if room.is_inside(self.x, self.y) and room.is_inside(
+                        level.player.x, level.player.y
+                    ):
                         self.is_triggered = True
                         return None
                 for corridor in level.corridors:
-                    if corridor.is_inside(self.x, self.y) and corridor.is_inside(level.player.x, level.player.y):
+                    if corridor.is_inside(self.x, self.y) and corridor.is_inside(
+                        level.player.x, level.player.y
+                    ):
                         self.is_triggered = True
                         return None

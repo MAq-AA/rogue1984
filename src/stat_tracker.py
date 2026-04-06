@@ -40,5 +40,8 @@ class _Tracker:
         run_list = [RunStats(**row) for row in all_stats]
         return GameStats(run_list)
 
+    def to_dict(self):
+        return asdict(self)
+
 
 stat_tracker = _Tracker()

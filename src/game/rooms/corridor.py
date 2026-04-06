@@ -1,7 +1,6 @@
 import random
 from typing import Literal
 
-from api import Tile
 from game.rooms import distance_to_line, in_range
 from game.rooms.door import Door, DoorColor
 from game.rooms.room import Room
