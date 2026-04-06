@@ -57,6 +57,7 @@ class Game:
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:
             self.current_depth = 1
             self.level = Level(depth=self.current_depth, player=Character())
+            self.fog_of_war = FogOfWar(self.level)
             self.game_status = GameStatus.ACTIVE
 
     def handle(self, event: InputEvent):
