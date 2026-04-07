@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import TypeVar
 
 from api import Tile
+from game.constants import MAX_ITEM_PER_TYPE
 from game.entities.entity import Entity
 from game.items import fist
 from game.items.item import Item
@@ -23,7 +24,10 @@ class Backpack:
         self.items.remove(item)
 
     def put(self, item) -> bool:
-        self.items.append(item)
+        if len(self.find_all(type(item))) < MAX_ITEM_PER_TYPE:
+            self.items.append(item)
+        else:
+            return False
         return True
 
     def find(self, item_id: int) -> Item:

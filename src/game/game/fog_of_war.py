@@ -116,7 +116,5 @@ class FogOfWar:
                 self.remove_fog_at(ix, iy)
 
     def remove_fog_at(self, x, y):
-        for fog_obj in self.all_fog_objects.values():
-            if fog_obj.x == x and fog_obj.y == y:
-                del self.all_fog_objects[(fog_obj.x, fog_obj.y)]
-                break
+        if self.all_fog_objects.get((x, y)) is not None:
+            del self.all_fog_objects[(x, y)]

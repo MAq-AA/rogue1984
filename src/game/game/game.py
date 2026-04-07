@@ -2,7 +2,7 @@ import logging
 from enum import Enum, auto
 
 from api import DrawTile, Frame, InputEvent, Tile
-from game.constants import MAX_DEPTH
+from game.constants import MAX_DEPTH, MAX_ITEM_PER_TYPE
 from game.entities.character import Character
 from game.game.fog_of_war import FogOfWar
 from game.game.level import Level
@@ -57,10 +57,9 @@ class Game:
             if self.ui.game_over(stat_tracker.load_stats()):
                 self.quit = True
 
-        # TODO add function to save score in high score table
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:
             self.current_depth = 1
-            self.level = Level(depth=self.current_depth, player=Character())
+            self.level = Level(depth=self.current_depth)
             self.fog_of_war = FogOfWar(self.level)
             self.game_status = GameStatus.ACTIVE
 
@@ -185,9 +184,10 @@ class Game:
         return ret
 
     def advance_depth(self):
+        depth_offset = self.get_depth_offset()
         self.current_depth += 1
         player = self.level.player
-        self.level = Level(depth=self.current_depth)
+        self.level = Level(depth=self.current_depth + depth_offset)
         self.level.add_player(player)
         self.level.player.remove_bonuses()
         self.level.player.remove_keys()
@@ -198,3 +198,26 @@ class Game:
 
         data_writer = Writer()
         data_writer.save_to_file(self)
+
+    def get_depth_offset(self):
+        depth_offset = 0
+        if len(self.level.player.backpack.find_all(Food)) == MAX_ITEM_PER_TYPE:
+            depth_offset += 1
+        if len(self.level.player.backpack.find_all(Scroll)) == MAX_ITEM_PER_TYPE:
+            depth_offset += 1
+        if len(self.level.player.backpack.find_all(Elixir)) == MAX_ITEM_PER_TYPE:
+            depth_offset += 1
+        if stat_tracker.enemies > 20:
+            depth_offset += 1
+        if stat_tracker.enemies > 40:
+            depth_offset += 1
+        if stat_tracker.enemies > 60:
+            depth_offset += 1
+        if self.level.player.max_hp < 15:
+            depth_offset -= 1
+        if self.level.player.max_hp < 5:
+            depth_offset -= 2
+        if self.level.player.hp < 10:
+            depth_offset -= 1
+
+        return depth_offset

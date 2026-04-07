@@ -63,6 +63,8 @@ class Level:
                 self.remove(target)
                 self.message += f"You picked up {target.name}\n"
                 target = self[obj.x + dx, obj.y + dy]
+            else:
+                obj.move(dx, dy)
         if target in [Tile.FLOOR, Tile.CORRIDOR]:
             obj.move(dx, dy)
         elif isinstance(target, Door):
