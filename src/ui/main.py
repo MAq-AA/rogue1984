@@ -36,3 +36,15 @@ class UI:
         for i, item in enumerate(items):
             if i + 1 == key:
                 return item.id
+
+    def prompt_load(self) -> str:
+        choice = -1
+        while choice == -1:
+            choice = render.prompt(
+                self.win,
+                "Saved game detected, would you like to continue?",
+                ["Load game", "New game", "quit"],
+                ["L", "N", "Q"],
+                ["load", "new", "quit"],
+            )
+        return choice

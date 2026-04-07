@@ -5,6 +5,7 @@ from typing import cast
 
 from api import Tile
 from game.base import GameObject
+from game.constants import SAVEFILE
 from game.entities import (
     Backpack,
     Character,
@@ -22,6 +23,7 @@ from game.game.game import Game, GameStatus
 from game.game.level import Level
 from game.items import Elixir, Food, Key, Scroll, Weapon
 from game.items.item import Item
+from game.items.treasure import Treasure
 from game.rooms import Door, Room, Stair
 from game.rooms.corridor import Corridor
 from game.rooms.door import DoorColor
@@ -52,6 +54,7 @@ class_map = {
     "GameStatus": GameStatus,
     "Tile": Tile,
     "HostilityLevel": HostilityLevel,
+    "Treasure": Treasure,
 }
 
 logger = logging.getLogger(__name__)
@@ -105,7 +108,7 @@ class Writer:
 
         return data
 
-    def save_to_file(self, game: Game, filename: str = "savegame.json"):
+    def save_to_file(self, game: Game, filename: str = SAVEFILE):
         with open("dict.json", "w") as f:
             from pprint import pformat
 
@@ -115,7 +118,7 @@ class Writer:
 
 
 class Reader:
-    def load_from_file(self, filename: str = "savegame.json") -> Game:
+    def load_from_file(self, filename: str = SAVEFILE) -> Game:
         with open(filename, "r") as f:
             data = json.load(f)
         return cast(Game, self.from_dict(data))

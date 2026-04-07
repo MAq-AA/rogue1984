@@ -137,10 +137,30 @@ def choose_item(win, items: Iterable[DisplayItem], weapons=False):
         list_box.addstr(i, 1, f"{i:d}")
         list_box.addstr(i, 3, item.name)
         list_box.addstr(i, 3 + max_name_length, f"{item.stat:5d}")
-        i += 1
+        if i < height - 2:
+            i += 1
+        else:
+            break
     if weapons:
         i += 1
         list_box.addstr(i, 1, "0 unequip weapon")
     key = list_box.getkey()
     if "0" <= key <= "9":
         return int(key)
+
+
+def prompt(
+    win, message: str, choices: list[str], keys: list[str], results: list
+) -> int:
+    msgbox = win.derwin(len(choices) + 3, len(message) + 2, 10, 10)
+    msgbox.erase()
+    msgbox.border()
+    msgbox.addstr(1, 1, message)
+    for i, choice in enumerate(choices):
+        msgbox.addstr(i + 2, 1, f"{keys[i]}: {choices[i]}")
+    key = msgbox.getkey().lower()
+    keys = [x.lower() for x in keys]
+    if key in keys:
+        return results[keys.index(key)]
+    else:
+        return -1

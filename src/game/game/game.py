@@ -186,8 +186,9 @@ class Game:
 
     def advance_depth(self):
         self.current_depth += 1
+        player = self.level.player
         self.level = Level(depth=self.current_depth)
-        self.level.add_player(self.level.player)
+        self.level.add_player(player)
         self.level.player.remove_bonuses()
         self.level.player.remove_keys()
         self.fog_of_war = FogOfWar(self.level)
