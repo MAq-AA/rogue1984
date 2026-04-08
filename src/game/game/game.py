@@ -60,7 +60,8 @@ class Game:
         # TODO add function to save score in high score table
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:
             self.current_depth = 1
-            self.level = Level(depth=self.current_depth, player=Character())
+            self.level = Level(depth=self.current_depth)
+            self.level.add_player(Character())
             self.fog_of_war = FogOfWar(self.level)
             self.game_status = GameStatus.ACTIVE
 
