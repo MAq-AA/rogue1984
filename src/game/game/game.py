@@ -40,8 +40,8 @@ class Game:
             if event is not None:
                 self.handle(event)
                 self.get_current_game_status()
-                self.do_action_by_game_status()
                 self.ui.draw(self.frame())
+                self.do_action_by_game_status()
 
     def get_current_game_status(self):
         if self.level.player.hp <= 0:
@@ -53,6 +53,7 @@ class Game:
 
     def do_action_by_game_status(self):
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:
+            self.ui.draw(self.frame())
             stat_tracker.write_stats()
             won = self.game_status == GameStatus.WON
             if self.ui.game_over(stat_tracker.load_stats(), won=won):
