@@ -21,6 +21,9 @@ class GameStatus(Enum):
 class Game:
     def __init__(self, ui):
         self.ui = ui
+        self.start_game()
+
+    def start_game(self):
         self.current_depth = 1
         self.level = Level(depth=self.current_depth)
         self.level.add_player(Character())
@@ -49,19 +52,13 @@ class Game:
             self.advance_depth()
 
     def do_action_by_game_status(self):
-        if self.game_status == GameStatus.WON:
-            stat_tracker.write_stats()
-        elif self.game_status == GameStatus.LOST:
-            stat_tracker.write_stats()
-            if self.ui.game_over(stat_tracker.load_stats()):
-                self.quit = True
-
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:
-            self.current_depth = 1
-            self.level = Level(depth=self.current_depth)
-            self.level.add_player(Character())
-            self.fog_of_war = FogOfWar(self.level)
-            self.game_status = GameStatus.ACTIVE
+            stat_tracker.write_stats()
+            won = self.game_status == GameStatus.WON
+            if self.ui.game_over(stat_tracker.load_stats(), won=won):
+                self.quit = True
+            else:
+                self.start_game()
 
     def handle(self, event: InputEvent):
         if self.level.player.is_stunned:
