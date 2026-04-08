@@ -31,8 +31,8 @@ class Entity(GameObject):
 
     def roll_strength(self):
         min_str = int((self.str + self.str_mod) * self.MIN_PART_OF_THE_STAT)
-        return random.randint(min_str, self.str)
+        return random.randint(min_str, max(min_str, self.str))
 
     def roll_dexterity(self):
         min_dex = int((self.dex + self.dex_mod) * self.MIN_PART_OF_THE_STAT)
-        return random.randint(min_dex, self.dex)
+        return random.randint(min_dex, max(min_dex, self.dex))
