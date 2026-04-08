@@ -91,8 +91,13 @@ def draw_status(win, frame: Frame):
     win.refresh()
 
 
-def draw_stats(win, stats: GameStats):
+def draw_stats(win, stats: GameStats, won: bool = False):
     win.erase()
+
+    if won:
+        win.addstr("Congratulations, you won")
+    else:
+        win.addstr("You died")
 
     columns = (9, 20, 29, 35, 44, 53, 62, 68, 75)
     header = (
@@ -107,15 +112,15 @@ def draw_stats(win, stats: GameStats):
         "Tiles",
     )
     for i, col in enumerate(columns):
-        win.addstr(0, col - len(header[i]), header[i])
+        win.addstr(1, col - len(header[i]), header[i])
     h, w = win.getmaxyx()
     for i, run in enumerate(stats.runs):
-        if i == h - 1:
+        if i == h - 2:
             break
         for j, stat in enumerate(fields(run)):
             col = columns[j]
             value = getattr(run, stat.name)
-            win.addstr(i + 1, col - len(str(value)), str(value))
+            win.addstr(i + 2, col - len(str(value)), str(value))
     win.addstr(h - 1, 0, "Press Space to restart, or q to quit")
 
     win.refresh()

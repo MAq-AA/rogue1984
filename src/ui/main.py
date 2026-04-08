@@ -23,8 +23,8 @@ class UI:
         render.draw(self.win, frame)
         render.draw_status(self.sidebar, frame)
 
-    def game_over(self, stats: GameStats) -> bool:
-        render.draw_stats(self.win, stats)
+    def game_over(self, stats: GameStats, won: bool = False) -> bool:
+        render.draw_stats(self.win, stats, won=won)
         while (key := self.get_input()) not in [InputEvent.CONFIRM, InputEvent.QUIT]:
             pass
         return key == InputEvent.QUIT
