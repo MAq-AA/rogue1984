@@ -28,6 +28,8 @@ from game.rooms import Door, Room, Stair
 from game.rooms.corridor import Corridor
 from game.rooms.door import DoorColor
 
+from stat_tracker import stat_tracker
+
 class_map = {
     "Game": Game,
     "GameObject": GameObject,
@@ -101,6 +103,7 @@ class Writer:
                 data["game_status"] = self.to_dict(obj.game_status)
                 data["fog_of_war"] = None
                 data["ui"] = None
+                data["stat_tracker"] = stat_tracker.to_dict()
             case GameObject():
                 pass
             case Enum():
@@ -141,6 +144,7 @@ class Reader:
                 game.level = level
                 game.game_status = game_status
                 game.fog_of_war = FogOfWar(level)
+                stat_tracker.from_dict(data["stat_tracker"])
                 return game
             case cls if issubclass(cls, Level):
                 data["items"] = cast(

@@ -92,7 +92,7 @@ class Level:
                 if isinstance(defender, Monster) and isinstance(attacker, Character):
                     attacker.backpack.put(defender.treasure)
                     stat_tracker.enemies += 1
-                    stat_tracker.treasure += defender.treasure.value
+                    stat_tracker.treasure = attacker.treasure
         elif not isinstance(attacker, Ogre) or attacker.preparing_to_attack:
             self.message += f"{attacker.name} missed {defender.name}\n"
 

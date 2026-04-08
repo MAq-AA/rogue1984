@@ -50,14 +50,12 @@ class Game:
 
     def do_action_by_game_status(self):
         if self.game_status == GameStatus.WON:
-            pass
-            # TODO present winner screen
+            stat_tracker.write_stats()
         elif self.game_status == GameStatus.LOST:
             stat_tracker.write_stats()
             if self.ui.game_over(stat_tracker.load_stats()):
                 self.quit = True
 
-        # TODO add function to save score in high score table
         if self.game_status in [GameStatus.WON, GameStatus.LOST]:
             self.current_depth = 1
             self.level = Level(depth=self.current_depth)

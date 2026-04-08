@@ -43,5 +43,9 @@ class _Tracker:
     def to_dict(self):
         return asdict(self)
 
+    def from_dict(self, data):
+        for stat in self.stats:
+            setattr(self, stat, data[stat])
+
 
 stat_tracker = _Tracker()
