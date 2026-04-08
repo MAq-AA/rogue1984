@@ -141,6 +141,7 @@ class Reader:
                 level = cast(Level, self.from_dict(data["level"]))
                 game_status = cast(GameStatus, self.from_dict(data["game_status"]))
                 game = Game(ui=None)
+                self.transfer(data, game)
                 game.level = level
                 game.game_status = game_status
                 game.fog_of_war = FogOfWar(level)
